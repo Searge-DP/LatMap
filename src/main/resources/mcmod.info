@@ -1,0 +1,20 @@
+[
+{
+  "modid": "LatMap",
+  "name": "LatMap",
+  "description": "LatvianModder's Minimap mod",
+  "version": "${version}",
+  "url": "http://minecraft.curseforge.com/mc-mods/236141",
+  "updateUrl": "",
+  "authorList": [
+    "LatvianModder"
+  ],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+  ]
+}
+]
