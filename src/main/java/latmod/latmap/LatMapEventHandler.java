@@ -10,16 +10,15 @@ import org.lwjgl.input.Keyboard;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
-import latmod.ftbu.core.*;
-import latmod.ftbu.core.api.*;
-import latmod.ftbu.core.client.*;
-import latmod.ftbu.core.gui.GuiIcons;
-import latmod.ftbu.core.net.*;
-import latmod.ftbu.core.util.*;
-import latmod.ftbu.core.world.LMWorldClient;
+import latmod.core.util.*;
+import latmod.ftbu.api.*;
 import latmod.ftbu.mod.FTBUFinals;
 import latmod.ftbu.mod.client.gui.friends.*;
 import latmod.ftbu.mod.client.minimap.*;
+import latmod.ftbu.util.*;
+import latmod.ftbu.util.client.*;
+import latmod.ftbu.util.gui.GuiIcons;
+import latmod.ftbu.world.LMWorldClient;
 import latmod.latmap.gui.GuiWaypoints;
 import latmod.latmap.wp.*;
 import net.minecraft.client.gui.GuiScreen;
@@ -74,22 +73,22 @@ public class LatMapEventHandler
 		{
 			int cx = MathHelperLM.chunk(e.renderer.posX);
 			int cz = MathHelperLM.chunk(e.renderer.posZ);
-			int dim = LatCoreMCClient.getDim();
-			MChunk c = Minimap.get(dim).loadChunk(cx, cz);
+			Minimap m = Minimap.get(LatCoreMCClient.getDim());
+			MChunk c = m.loadChunk(cx, cz);
 			c.reload(LatCoreMCClient.mc.theWorld);
-			LMNetHelper.sendToServer(new MessageAreaRequest(cx, cz, dim, 1));
+			m.requestArea(cx, cz, 1);
 		}
 	}
 	
 	@SubscribeEvent
-	public void worldJoined(LMClientWorldJoinedEvent e)
+	public void worldJoined(EventLMWorldClient.Joined e)
 	{
 		Minimap.load();
 		Waypoints.load();
 	}
 	
 	@SubscribeEvent
-	public void worldClosed(LMClientWorldClosedEvent e)
+	public void worldClosed(EventLMWorldClient.Closed e)
 	{
 		Minimap.save();
 		Waypoints.save();
@@ -98,11 +97,11 @@ public class LatMapEventHandler
 	@SubscribeEvent
 	public void playerDied(LivingDeathEvent e)
 	{
-		LatCoreMC.printChat(null, "Remote: " + e.entity.worldObj.isRemote + ", Entity: " + e.entity);
+		//LatCoreMC.printChat(null, "Remote: " + e.entity.worldObj.isRemote + ", Entity: " + e.entity);
 	}
 	
 	@SubscribeEvent
-	public void playerDied(LMPlayerClientEvent.PlayerDied e)
+	public void playerDied(EventLMPlayerClient.PlayerDied e)
 	{
 		if(Waypoints.enabled.getB() && Waypoints.deathPoint.getB() && e.player.equalsPlayer(LMWorldClient.inst.clientPlayer))
 		{
@@ -122,7 +121,7 @@ public class LatMapEventHandler
 			w.name = sb.toString();
 			w.dim = ep.dimension;
 			w.setPos(ep.posX, ep.posY, ep.posZ);
-			w.type = Waypoint.Type.BEACON;
+			w.type = WaypointType.BEACON;
 			w.color = LMColorUtils.getRGBA(LatCoreMC.rand.nextInt(100) + 155, LatCoreMC.rand.nextInt(100), 0, 255);
 			Waypoints.add(w);
 		}

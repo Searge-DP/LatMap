@@ -1,0 +1,21 @@
+config.group.waypoints=Virzienpunkti
+config.property.waypoint_type=Virzienpunkti Tips
+config.property.display_title=Rādīt Nosaukumu
+config.property.display_distance=Rādīt Attālumu
+config.property.render_distance=Zīmēšanas Attālums
+config.property.death_point=Pēdējā Nāve
+
+config.group.minimap=Minikarte
+config.property.render_ingame=Rādīt Spēlē
+config.property.render_players=Spēlētāji
+config.property.render_waypoints=Virzienpunkti
+config.property.calc_height=Aprēķināt Augstumu
+config.property.blur=Miglains
+config.property.zoom=Pietuvinājums
+config.property.size_ingame=Izmērs Spēlē
+config.property.render_grid=Rūtiņas
+config.property.render_claimed_chunks=Iezīmētie Apgabali
+config.property.custom_map_colors=Bloku Krāsas
+
+latmap:waypoint.type.beacon=Stars
+latmap:waypoint.type.marker=Mērķis

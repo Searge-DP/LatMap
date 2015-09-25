@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 
 import cpw.mods.fml.relauncher.*;
-import latmod.ftbu.core.client.ClientConfig;
-import latmod.ftbu.core.util.*;
-import latmod.ftbu.core.world.LMWorldClient;
+import latmod.core.util.*;
+import latmod.ftbu.util.client.ClientConfig;
+import latmod.ftbu.world.LMWorldClient;
 
 @SideOnly(Side.CLIENT)
 public class Waypoints

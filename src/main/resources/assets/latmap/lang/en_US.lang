@@ -1,0 +1,21 @@
+config.group.waypoints=Waypoints
+config.property.waypoint_type=Waypoint Type
+config.property.display_title=Display Title
+config.property.display_distance=Display Distance
+config.property.render_distance=Render Distance
+config.property.death_point=Death Point
+
+config.group.minimap=Minimap
+config.property.render_ingame=Render Ingame
+config.property.render_players=Players
+config.property.render_waypoints=Waypoints
+config.property.calc_height=Calculate Height
+config.property.blur=Blur
+config.property.zoom=Zoom
+config.property.size_ingame=Ingame Size
+config.property.render_grid=Render Grid
+config.property.render_claimed_chunks=Render Claimed Chunks
+config.property.custom_map_colors=Block Colors
+
+latmap:waypoint.type.beacon=Beacon
+latmap:waypoint.type.marker=Marker

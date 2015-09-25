@@ -2,10 +2,10 @@ package latmod.latmap.gui;
 
 import org.lwjgl.opengl.GL11;
 
-import latmod.ftbu.core.client.FTBULang;
-import latmod.ftbu.core.gui.*;
-import latmod.ftbu.core.util.LMColorUtils;
-import latmod.ftbu.mod.client.gui.field.color.ColorSelected;
+import latmod.core.util.LMColorUtils;
+import latmod.ftbu.api.callback.ColorSelected;
+import latmod.ftbu.util.client.FTBULang;
+import latmod.ftbu.util.gui.*;
 import latmod.latmap.wp.Waypoint;
 import net.minecraft.client.gui.GuiYesNo;
 

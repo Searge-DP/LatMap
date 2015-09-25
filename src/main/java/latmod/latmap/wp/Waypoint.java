@@ -2,45 +2,14 @@ package latmod.latmap.wp;
 
 import com.google.gson.*;
 
-import cpw.mods.fml.relauncher.*;
-import latmod.ftbu.core.gui.*;
-import latmod.ftbu.core.util.*;
-import latmod.ftbu.mod.FTBU;
+import latmod.core.util.*;
 
-@SideOnly(Side.CLIENT)
 public class Waypoint
 {
-	public static enum Type
-	{
-		BEACON("beacon", GuiIcons.beacon),
-		MARKER("marker", GuiIcons.marker);
-		
-		public final String ID;
-		public final TextureCoords icon;
-		
-		Type(String s, TextureCoords t)
-		{
-			ID = s;
-			icon = t;
-		}
-
-		public boolean isMarker()
-		{ return this == MARKER; }
-		
-		public boolean isBeacon()
-		{ return this == BEACON; }
-		
-		public Type next()
-		{ return values()[(ordinal() + 1) % values().length]; }
-
-		public String getIDS()
-		{ return FTBU.mod.translateClient("waypoint.type." + ID); }
-	};
-	
 	public String name;
 	//public String customIcon;
 	public boolean enabled = true;
-	public Type type = Type.BEACON;
+	public WaypointType type = WaypointType.BEACON;
 	public int posX, posY, posZ, dim, color;
 	public int listID = -1;
 	
@@ -77,7 +46,7 @@ public class Waypoint
 			JsonObject o = new JsonObject();
 			o.add("Name", new JsonPrimitive(src.name));
 			o.add("On", new JsonPrimitive(src.enabled ? 1 : 0));
-			o.add("Type", new JsonPrimitive(src.type.ordinal()));
+			o.add("Type", new JsonPrimitive(src.type.ID));
 			o.add("X", new JsonPrimitive(src.posX));
 			o.add("Y", new JsonPrimitive(src.posY));
 			o.add("Z", new JsonPrimitive(src.posZ));
@@ -93,7 +62,7 @@ public class Waypoint
 			Waypoint w = new Waypoint();
 			w.name = o.get("Name").getAsString();
 			w.enabled = o.get("On").getAsInt() == 1;
-			w.type = Type.values()[o.get("Type").getAsInt()];
+			w.type = WaypointType.get(o.get("Type").getAsString());
 			w.posX = o.get("X").getAsInt();
 			w.posY = o.get("Y").getAsInt();
 			w.posZ = o.get("Z").getAsInt();

@@ -1,8 +1,8 @@
 package latmod.latmap;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import latmod.ftbu.core.*;
-import latmod.ftbu.core.util.LMJsonUtils;
+import latmod.core.util.LMJsonUtils;
+import latmod.ftbu.util.*;
 import latmod.latmap.wp.Waypoints;
 
 @Mod(modid = LatMap.MOD_ID, name = "LatMap", version = "@VERSION@", dependencies = "required-after:FTBU", canBeDeactivated = true) 

@@ -2,9 +2,9 @@ package latmod.latmap.gui;
 
 import org.lwjgl.opengl.GL11;
 
-import latmod.ftbu.core.LatCoreMC;
-import latmod.ftbu.core.gui.*;
-import latmod.ftbu.mod.client.gui.field.color.*;
+import latmod.ftbu.api.callback.*;
+import latmod.ftbu.util.LatCoreMC;
+import latmod.ftbu.util.gui.*;
 import latmod.latmap.wp.*;
 import net.minecraft.client.gui.*;
 
@@ -42,7 +42,7 @@ public class GuiWaypoints extends GuiLM implements IColorCallback, GuiYesNoCallb
 				if(isShiftKeyDown())
 				{
 					Waypoint w = new Waypoint();
-					w.type = Waypoint.Type.BEACON;
+					w.type = WaypointType.BEACON;
 					w.setPos(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
 					w.name = w.posX + " " + w.posY + " " + w.posZ;
 					w.dim = mc.thePlayer.dimension;

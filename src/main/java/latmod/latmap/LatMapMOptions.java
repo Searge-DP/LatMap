@@ -1,7 +1,7 @@
 package latmod.latmap;
 
-import latmod.ftbu.core.client.ClientConfig;
 import latmod.ftbu.mod.client.minimap.*;
+import latmod.ftbu.util.client.ClientConfig;
 
 public class LatMapMOptions extends MOptions
 {

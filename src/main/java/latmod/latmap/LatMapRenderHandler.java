@@ -6,12 +6,12 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
-import latmod.ftbu.core.client.*;
-import latmod.ftbu.core.client.model.CubeRenderer;
-import latmod.ftbu.core.gui.GuiLM;
-import latmod.ftbu.core.util.*;
+import latmod.core.util.*;
 import latmod.ftbu.mod.FTBU;
 import latmod.ftbu.mod.client.minimap.MRenderer;
+import latmod.ftbu.util.client.*;
+import latmod.ftbu.util.client.model.CubeRenderer;
+import latmod.ftbu.util.gui.GuiLM;
 import latmod.latmap.wp.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;

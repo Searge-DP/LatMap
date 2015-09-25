@@ -1,11 +1,10 @@
 package latmod.latmap.gui;
 
-import latmod.ftbu.core.LatCoreMC;
-import latmod.ftbu.core.client.FTBULang;
-import latmod.ftbu.core.gui.*;
-import latmod.ftbu.core.util.LMColorUtils;
-import latmod.ftbu.mod.client.gui.field.*;
-import latmod.ftbu.mod.client.gui.field.color.*;
+import latmod.core.util.LMColorUtils;
+import latmod.ftbu.api.callback.*;
+import latmod.ftbu.util.LatCoreMC;
+import latmod.ftbu.util.client.FTBULang;
+import latmod.ftbu.util.gui.*;
 import latmod.latmap.wp.*;
 
 public class GuiEditWaypoint extends GuiLM implements IColorCallback, IFieldCallback
@@ -28,7 +27,7 @@ public class GuiEditWaypoint extends GuiLM implements IColorCallback, IFieldCall
 		if(w == null)
 		{
 			current.name = "Waypoint " + LMColorUtils.getHex(LatCoreMC.rand.nextInt());
-			current.type = Waypoint.Type.BEACON;
+			current.type = WaypointType.BEACON;
 			current.setPos(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
 			current.dim = mc.thePlayer.dimension;
 			current.color = LatCoreMC.rand.nextInt();
