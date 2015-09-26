@@ -3,7 +3,7 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import latmod.core.util.LMJsonUtils;
 import latmod.ftbu.util.*;
-import latmod.latmap.wp.Waypoints;
+import latmod.latmap.wp.*;
 
 @Mod(modid = LatMap.MOD_ID, name = "LatMap", version = "@VERSION@", dependencies = "required-after:FTBU", canBeDeactivated = true) 
 public class LatMap
@@ -24,10 +24,10 @@ public class LatMap
 			throw new RuntimeException("LatMap can only run on client side!");
 		else LatCoreMC.logger.info(LatCoreMC.logger.getClass().getName());
 		
+		LMJsonUtils.register(Waypoint.class, new Waypoint.Serializer());
 		EventBusHelper.register(LatMapEventHandler.instance);
 		EventBusHelper.register(LatMapRenderHandler.instance);
 		LatMapMOptions.instance.init();
 		Waypoints.init();
-		LMJsonUtils.updateGson();
 	}
 }

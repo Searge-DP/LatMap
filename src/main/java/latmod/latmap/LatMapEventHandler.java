@@ -50,12 +50,6 @@ public class LatMapEventHandler
 	}
 	
 	@SubscribeEvent
-	public void onGsonEvent(EventFTBUGson e)
-	{
-		e.add(Waypoint.class, new Waypoint.Serializer());
-	}
-	
-	@SubscribeEvent
 	public void chunkChanged(EntityEvent.EnteringChunk e)
 	{
 		if(e.entity.worldObj.isRemote && LatMapMOptions.renderIngame.getB() && e.entity.getUniqueID().equals(LMWorldClient.inst.clientPlayer.getUUID()))
@@ -76,7 +70,7 @@ public class LatMapEventHandler
 			Minimap m = Minimap.get(LatCoreMCClient.getDim());
 			MChunk c = m.loadChunk(cx, cz);
 			c.reload(LatCoreMCClient.mc.theWorld);
-			m.requestArea(cx, cz, 1);
+			m.requestArea(1);
 		}
 	}
 	
@@ -97,7 +91,8 @@ public class LatMapEventHandler
 	@SubscribeEvent
 	public void playerDied(LivingDeathEvent e)
 	{
-		//LatCoreMC.printChat(null, "Remote: " + e.entity.worldObj.isRemote + ", Entity: " + e.entity);
+		if(e.entity instanceof EntityPlayer)
+			LatCoreMC.printChat((EntityPlayer)e.entity, "Remote: " + e.entity.worldObj.isRemote + ", Entity: " + e.entity);
 	}
 	
 	@SubscribeEvent
