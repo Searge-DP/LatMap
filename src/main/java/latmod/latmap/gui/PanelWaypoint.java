@@ -3,7 +3,8 @@ package latmod.latmap.gui;
 import org.lwjgl.opengl.GL11;
 
 import latmod.core.util.LMColorUtils;
-import latmod.ftbu.api.callback.ColorSelected;
+import latmod.ftbu.api.LMGuis;
+import latmod.ftbu.api.callback.ClientTickCallback;
 import latmod.ftbu.util.client.*;
 import latmod.ftbu.util.gui.*;
 import latmod.latmap.wp.Waypoint;
@@ -12,7 +13,7 @@ import net.minecraft.client.gui.GuiYesNo;
 public class PanelWaypoint extends PanelLM
 {
 	public final Waypoint waypoint;
-	public final ButtonLM edit, color, type, delete;
+	public final ButtonLM edit, teleport, color, type, delete;
 	
 	public PanelWaypoint(PanelWaypoints p, Waypoint w)
 	{
@@ -37,12 +38,30 @@ public class PanelWaypoint extends PanelLM
 		
 		edit.title = FTBULang.button_settings();
 		
+		teleport = new ButtonLM(p.gui, width - 72, 1, 16, 16)
+		{
+			public void onButtonPressed(int b)
+			{
+				gui.playClickSound();
+				
+				LatCoreMCClient.addClientTickCallback(new ClientTickCallback()
+				{
+					public void onCallback()
+					{ LatCoreMCClient.execClientCommand("/tpl " + waypoint.posX + " " + waypoint.posY + " " + waypoint.posZ); }
+				});
+				
+				gui.container.player.closeScreen();
+			}
+		};
+		
+		teleport.title = "/tpl " + waypoint.posX + ".5 " + waypoint.posY + ".5 " + waypoint.posZ + ".5";
+		
 		color = new ButtonLM(p.gui, width - 54, 1, 16, 16)
 		{
 			public void onButtonPressed(int b)
 			{
 				gui.playClickSound();
-				ColorSelected.displayGui((GuiWaypoints)gui, waypoint.color, waypoint.listID, true);
+				LMGuis.displayColorSelector((GuiWaypoints)gui, waypoint.color, waypoint.listID, true);
 			}
 		};
 		
@@ -75,6 +94,7 @@ public class PanelWaypoint extends PanelLM
 	public void addWidgets()
 	{
 		add(edit);
+		add(teleport);
 		add(color);
 		add(type);
 		add(delete);
@@ -91,6 +111,7 @@ public class PanelWaypoint extends PanelLM
 		color.render(GuiIcons.color_blank);
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		type.render(waypoint.type.icon);
+		if(mouseOver) teleport.render(GuiIcons.compass);
 		if(delete.mouseOver()) delete.render(GuiIcons.remove);
 		else
 		{

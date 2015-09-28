@@ -1,6 +1,7 @@
 package latmod.latmap.gui;
 
 import latmod.core.util.LMColorUtils;
+import latmod.ftbu.api.LMGuis;
 import latmod.ftbu.api.callback.*;
 import latmod.ftbu.util.LatCoreMC;
 import latmod.ftbu.util.client.FTBULang;
@@ -44,7 +45,7 @@ public class GuiEditWaypoint extends GuiLM implements IColorCallback, IFieldCall
 			public void onButtonPressed(int b)
 			{
 				gui.playClickSound();
-				FieldSelected.displayGui(0, FieldType.TEXT, current.name, GuiEditWaypoint.this);
+				LMGuis.displayFieldSelector(0, FieldType.TEXT, current.name, GuiEditWaypoint.this);
 			}
 		};
 		
@@ -56,7 +57,7 @@ public class GuiEditWaypoint extends GuiLM implements IColorCallback, IFieldCall
 			public void onButtonPressed(int b)
 			{
 				gui.playClickSound();
-				FieldSelected.displayGui(1, FieldType.INT, current.posX, GuiEditWaypoint.this);
+				LMGuis.displayFieldSelector(1, FieldType.INT, current.posX, GuiEditWaypoint.this);
 			}
 		};
 		
@@ -65,7 +66,7 @@ public class GuiEditWaypoint extends GuiLM implements IColorCallback, IFieldCall
 			public void onButtonPressed(int b)
 			{
 				gui.playClickSound();
-				FieldSelected.displayGui(2, FieldType.INT, current.posY, GuiEditWaypoint.this);
+				LMGuis.displayFieldSelector(2, FieldType.INT, current.posY, GuiEditWaypoint.this);
 			}
 		};
 		
@@ -74,7 +75,7 @@ public class GuiEditWaypoint extends GuiLM implements IColorCallback, IFieldCall
 			public void onButtonPressed(int b)
 			{
 				gui.playClickSound();
-				FieldSelected.displayGui(3, FieldType.INT, current.posZ, GuiEditWaypoint.this);
+				LMGuis.displayFieldSelector(3, FieldType.INT, current.posZ, GuiEditWaypoint.this);
 			}
 		};
 		
@@ -96,7 +97,7 @@ public class GuiEditWaypoint extends GuiLM implements IColorCallback, IFieldCall
 			public void onButtonPressed(int b)
 			{
 				gui.playClickSound();
-				ColorSelected.displayGui(GuiEditWaypoint.this, current.color, 0, false);
+				LMGuis.displayColorSelector(GuiEditWaypoint.this, current.color, 0, false);
 			}
 		};
 		

@@ -5,7 +5,7 @@ import latmod.core.util.LMJsonUtils;
 import latmod.ftbu.util.*;
 import latmod.latmap.wp.*;
 
-@Mod(modid = LatMap.MOD_ID, name = "LatMap", version = "@VERSION@", dependencies = "required-after:FTBU", canBeDeactivated = true) 
+@Mod(modid = LatMap.MOD_ID, name = "LatMap", version = "@VERSION@", dependencies = "required-after:FTBU") 
 public class LatMap
 {
 	protected static final String MOD_ID = "LatMap";

@@ -17,7 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.util.*;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 public class LatMapRenderHandler
@@ -102,13 +102,8 @@ public class LatMapRenderHandler
 				
 				if(distSq <= renderDistSq)
 				{
-					AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(w.posX, 0D, w.posZ, w.posX + 1D, 256D, w.posZ + 1D);
-					
-					if(LMFrustrumUtils.frustrum.isBoundingBoxInFrustum(aabb))
-					{
-						if(w.type.isMarker()) visibleMarkers.add(new WaypointClient(w, x, y, z, distSq));
-						else visibleBeacons.add(new WaypointClient(w, x, y, z, distSq));
-					}
+					if(w.type.isMarker()) visibleMarkers.add(new WaypointClient(w, x, y, z, distSq));
+					else visibleBeacons.add(new WaypointClient(w, x, y, z, distSq));
 				}
 			}
 		}
@@ -186,11 +181,14 @@ public class LatMapRenderHandler
 			{
 				WaypointClient w = visibleBeacons.get(i);
 				
-				GL11.glPushMatrix();
-				GL11.glTranslated(w.posX - LMFrustrumUtils.renderX, -LMFrustrumUtils.playerY, w.posZ - LMFrustrumUtils.renderZ);
-				GL11.glColor4f(w.colRF, w.colGF, w.colBF, 0.15F);
-				GL11.glCallList(beaconListID);
-				GL11.glPopMatrix();
+				if(LMFrustrumUtils.frustrum.isBoxInFrustum(w.posX, 0D, w.posZ, w.posX + 1D, 256D, w.posZ + 1D))
+				{
+					GL11.glPushMatrix();
+					GL11.glTranslated(w.posX - LMFrustrumUtils.renderX, -LMFrustrumUtils.playerY, w.posZ - LMFrustrumUtils.renderZ);
+					GL11.glColor4f(w.colRF, w.colGF, w.colBF, 0.15F);
+					GL11.glCallList(beaconListID);
+					GL11.glPopMatrix();
+				}
 			}
 			
 			GL11.glDepthMask(true);

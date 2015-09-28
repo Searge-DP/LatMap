@@ -52,18 +52,19 @@ public class LatMapEventHandler
 	@SubscribeEvent
 	public void chunkChanged(EntityEvent.EnteringChunk e)
 	{
-		if(e.entity.worldObj.isRemote && LatMapMOptions.renderIngame.getB() && e.entity.getUniqueID().equals(LMWorldClient.inst.clientPlayer.getUUID()))
+		if(e.entity.worldObj.isRemote && LatCoreMCClient.isPlaying() && LatMapMOptions.renderIngame.getB() && e.entity.getUniqueID().equals(LMWorldClient.inst.clientPlayer.getUUID()))
 		{
 			int rd = LatMapMOptions.zoomA[LatMapMOptions.zoom.getI()];
 			Minimap m = Minimap.get(e.entity.dimension);
 			m.reloadArea(e.entity.worldObj, e.newChunkX - MathHelperLM.floor(rd / 2D), e.newChunkZ - MathHelperLM.floor(rd / 2D), rd, rd);
+			m.requestArea(7);
 		}
 	}
 	
 	@SubscribeEvent
 	public void renderChunk(RenderWorldEvent.Pre e)
 	{
-		if(e.pass == 0 && LatMapMOptions.renderIngame.getB())
+		if(e.pass == 0 && LatCoreMCClient.isPlaying() && LatMapMOptions.renderIngame.getB())
 		{
 			int cx = MathHelperLM.chunk(e.renderer.posX);
 			int cz = MathHelperLM.chunk(e.renderer.posZ);
