@@ -19,10 +19,9 @@ public class LatMap
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e)
 	{
-		LMMod.init(this, null, null);
+		LMMod.init(this);
 		if(LatCoreMC.isDedicatedServer())
 			throw new RuntimeException("LatMap can only run on client side!");
-		else LatCoreMC.logger.info(LatCoreMC.logger.getClass().getName());
 		
 		LMJsonUtils.register(Waypoint.class, new Waypoint.Serializer());
 		EventBusHelper.register(LatMapEventHandler.instance);

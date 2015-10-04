@@ -3,9 +3,9 @@ package latmod.latmap.gui;
 import latmod.ftbu.util.gui.PanelLM;
 import latmod.latmap.wp.*;
 
-public class PanelWaypoints extends PanelLM
+public class PanelWaypointList extends PanelLM
 {
-	public PanelWaypoints(GuiWaypoints g)
+	public PanelWaypointList(GuiWaypoints g)
 	{
 		super(g, 0, 20, 0, 0);
 	}

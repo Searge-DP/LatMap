@@ -11,7 +11,7 @@ import net.minecraft.client.gui.*;
 public class GuiWaypoints extends GuiLM implements IColorCallback, GuiYesNoCallback
 {
 	public final GuiScreen parent;
-	public final PanelWaypoints panelWaypoints;
+	public final PanelWaypointList panelWaypoints;
 	public final ButtonLM buttonClose, buttonAdd;
 	
 	public GuiWaypoints(GuiScreen g)
@@ -22,7 +22,7 @@ public class GuiWaypoints extends GuiLM implements IColorCallback, GuiYesNoCallb
 		xSize = width;
 		ySize = height;
 		
-		panelWaypoints = new PanelWaypoints(this);
+		panelWaypoints = new PanelWaypointList(this);
 		
 		buttonClose = new ButtonLM(this, 0, 2, 16, 16)
 		{

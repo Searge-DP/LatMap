@@ -15,7 +15,7 @@ public class PanelWaypoint extends PanelLM
 	public final Waypoint waypoint;
 	public final ButtonLM edit, teleport, color, type, delete;
 	
-	public PanelWaypoint(PanelWaypoints p, Waypoint w)
+	public PanelWaypoint(PanelWaypointList p, Waypoint w)
 	{
 		super(p.gui, 0, p.height, p.width, 18);
 		waypoint = w;

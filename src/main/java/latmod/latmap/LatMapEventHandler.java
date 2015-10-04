@@ -13,12 +13,13 @@ import cpw.mods.fml.common.gameevent.InputEvent;
 import latmod.core.util.*;
 import latmod.ftbu.api.*;
 import latmod.ftbu.mod.FTBUFinals;
-import latmod.ftbu.mod.client.gui.friends.*;
+import latmod.ftbu.mod.client.gui.friends.PlayerAction;
 import latmod.ftbu.mod.client.minimap.*;
-import latmod.ftbu.util.*;
+import latmod.ftbu.notification.*;
+import latmod.ftbu.util.LatCoreMC;
 import latmod.ftbu.util.client.*;
 import latmod.ftbu.util.gui.GuiIcons;
-import latmod.ftbu.world.LMWorldClient;
+import latmod.ftbu.world.*;
 import latmod.latmap.gui.GuiWaypoints;
 import latmod.latmap.wp.*;
 import net.minecraft.client.gui.GuiScreen;
@@ -36,8 +37,8 @@ public class LatMapEventHandler
 	
 	public static final PlayerAction waypoints = new PlayerAction(GuiIcons.compass)
 	{
-		public void onClicked(GuiFriends g)
-		{ g.mc.displayGuiScreen(new GuiWaypoints(g)); }
+		public void onClicked(LMPlayerClient p)
+		{ LatCoreMCClient.mc.displayGuiScreen(new GuiWaypoints(LatCoreMCClient.mc.currentScreen)); }
 		
 		public String getTitle()
 		{ return Waypoints.clientConfig.getIDS(); }
@@ -57,7 +58,6 @@ public class LatMapEventHandler
 			int rd = LatMapMOptions.zoomA[LatMapMOptions.zoom.getI()];
 			Minimap m = Minimap.get(e.entity.dimension);
 			m.reloadArea(e.entity.worldObj, e.newChunkX - MathHelperLM.floor(rd / 2D), e.newChunkZ - MathHelperLM.floor(rd / 2D), rd, rd);
-			m.requestArea(7);
 		}
 	}
 	
@@ -71,7 +71,7 @@ public class LatMapEventHandler
 			Minimap m = Minimap.get(LatCoreMCClient.getDim());
 			MChunk c = m.loadChunk(cx, cz);
 			c.reload(LatCoreMCClient.mc.theWorld);
-			m.requestArea(1);
+			//m.requestArea(1);
 		}
 	}
 	
@@ -80,6 +80,10 @@ public class LatMapEventHandler
 	{
 		Minimap.load();
 		Waypoints.load();
+		
+		int rd = LatMapMOptions.zoomA[LatMapMOptions.zoom.getI()];
+		Minimap m = Minimap.get(LatCoreMCClient.getDim());
+		m.reloadArea(LatCoreMCClient.mc.theWorld, MathHelperLM.chunk(LatCoreMCClient.mc.thePlayer.posX) - MathHelperLM.floor(rd / 2D), MathHelperLM.chunk(LatCoreMCClient.mc.thePlayer.posZ) - MathHelperLM.floor(rd / 2D), rd, rd);
 	}
 	
 	@SubscribeEvent
@@ -133,7 +137,6 @@ public class LatMapEventHandler
 			int key = Keyboard.getEventKey();
 			if(key == Keyboard.KEY_GRAVE)
 			{
-				Minimap.save();
 			}
 			else if(key == Keyboard.KEY_MINUS)
 			{
@@ -181,7 +184,7 @@ public class LatMapEventHandler
 					Notification n = new Notification(null, new ChatComponentText("Minimap exported!"), 2000);
 					n.setDesc(new ChatComponentText(f.getName()));
 					n.setItem(new ItemStack(Items.map));
-					n.setClickEvent(new NotificationClick(NotificationClick.FILE, f.getAbsolutePath()));
+					n.setClickEvent(new ClickAction(ClickAction.FILE, f.getAbsolutePath()));
 					ClientNotifications.add(n);
 				}
 				else
