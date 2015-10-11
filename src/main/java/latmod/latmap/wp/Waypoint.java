@@ -2,7 +2,7 @@ package latmod.latmap.wp;
 
 import com.google.gson.*;
 
-import latmod.core.util.*;
+import latmod.lib.*;
 
 public class Waypoint
 {

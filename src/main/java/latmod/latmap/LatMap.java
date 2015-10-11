@@ -1,9 +1,9 @@
 package latmod.latmap;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import latmod.core.util.LMJsonUtils;
 import latmod.ftbu.util.*;
 import latmod.latmap.wp.*;
+import latmod.lib.LMJsonUtils;
 
 @Mod(modid = LatMap.MOD_ID, name = "LatMap", version = "@VERSION@", dependencies = "required-after:FTBU") 
 public class LatMap

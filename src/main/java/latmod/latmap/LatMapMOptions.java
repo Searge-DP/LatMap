@@ -1,18 +1,18 @@
 package latmod.latmap;
 
+import latmod.ftbu.api.client.*;
 import latmod.ftbu.mod.client.minimap.*;
-import latmod.ftbu.util.client.ClientConfig;
 
 public class LatMapMOptions extends MOptions
 {
 	public static final LatMapMOptions instance = new LatMapMOptions();
 	
 	public static final ClientConfig clientConfig = new ClientConfig("minimap");
-	public static final ClientConfig.Property renderIngame = new ClientConfig.Property("render_ingame", 0, "disabled", "right", "left");
-	public static final ClientConfig.Property players = new ClientConfig.Property("render_players", false);
-	public static final ClientConfig.Property waypoints = new ClientConfig.Property("render_waypoints", false);
-	public static final ClientConfig.Property calcHeight = new ClientConfig.Property("calc_height", true);
-	public static final ClientConfig.Property blur = new ClientConfig.Property("blur", false)
+	public static final ClientConfigProperty renderIngame = new ClientConfigProperty("render_ingame", 0, "disabled", "right", "left");
+	public static final ClientConfigProperty players = new ClientConfigProperty("render_players", false);
+	public static final ClientConfigProperty waypoints = new ClientConfigProperty("render_waypoints", false);
+	public static final ClientConfigProperty calcHeight = new ClientConfigProperty("calc_height", true);
+	public static final ClientConfigProperty blur = new ClientConfigProperty("blur", false)
 	{
 		public void onClicked()
 		{
@@ -25,7 +25,7 @@ public class LatMapMOptions extends MOptions
 	};
 	
 	public static final int[] zoomA = { 3, 5, 7, 9, 11, 13 };
-	public static final ClientConfig.Property zoom = new ClientConfig.Property("zoom", 2, getZoomAValues()).setRawValues();
+	public static final ClientConfigProperty zoom = new ClientConfigProperty("zoom", 2, getZoomAValues()).setRawValues();
 	private static final String[] getZoomAValues()
 	{
 		String[] s = new String[zoomA.length];
@@ -35,7 +35,7 @@ public class LatMapMOptions extends MOptions
 	}
 	
 	public static final int[] sizeA = { 64, 96, 128, 160 };
-	public static final ClientConfig.Property size = new ClientConfig.Property("size_ingame", 2, getSizeAValues()).setRawValues();
+	public static final ClientConfigProperty size = new ClientConfigProperty("size_ingame", 2, getSizeAValues()).setRawValues();
 	private static final String[] getSizeAValues()
 	{
 		String[] s = new String[sizeA.length];
@@ -44,9 +44,9 @@ public class LatMapMOptions extends MOptions
 		return s;
 	}
 	
-	public static final ClientConfig.Property grid = new ClientConfig.Property("render_grid", true);
-	public static final ClientConfig.Property claimedChunks = new ClientConfig.Property("render_claimed_chunks", true);
-	public static final ClientConfig.Property customColors = new ClientConfig.Property("custom_map_colors", true);
+	public static final ClientConfigProperty grid = new ClientConfigProperty("render_grid", true);
+	public static final ClientConfigProperty claimedChunks = new ClientConfigProperty("render_claimed_chunks", true);
+	public static final ClientConfigProperty customColors = new ClientConfigProperty("custom_map_colors", true);
 	
 	public void init()
 	{
@@ -60,7 +60,7 @@ public class LatMapMOptions extends MOptions
 		clientConfig.add(grid);
 		clientConfig.add(claimedChunks);
 		clientConfig.add(customColors);
-		ClientConfig.Registry.add(clientConfig);
+		ClientConfigRegistry.add(clientConfig);
 		
 		Minimap.mapOptions = this;
 	}

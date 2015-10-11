@@ -10,8 +10,8 @@ import org.lwjgl.input.Keyboard;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
-import latmod.core.util.*;
 import latmod.ftbu.api.*;
+import latmod.ftbu.api.client.EventPlayerAction;
 import latmod.ftbu.mod.FTBUFinals;
 import latmod.ftbu.mod.client.gui.friends.PlayerAction;
 import latmod.ftbu.mod.client.minimap.*;
@@ -22,6 +22,7 @@ import latmod.ftbu.util.gui.GuiIcons;
 import latmod.ftbu.world.*;
 import latmod.latmap.gui.GuiWaypoints;
 import latmod.latmap.wp.*;
+import latmod.lib.*;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;

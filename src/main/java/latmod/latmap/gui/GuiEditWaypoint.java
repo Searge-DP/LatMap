@@ -1,12 +1,12 @@
 package latmod.latmap.gui;
 
-import latmod.core.util.LMColorUtils;
-import latmod.ftbu.api.LMGuis;
-import latmod.ftbu.api.callback.*;
+import latmod.ftbu.api.client.LMGuis;
+import latmod.ftbu.api.client.callback.*;
 import latmod.ftbu.util.LatCoreMC;
 import latmod.ftbu.util.client.FTBULang;
 import latmod.ftbu.util.gui.*;
 import latmod.latmap.wp.*;
+import latmod.lib.LMColorUtils;
 
 public class GuiEditWaypoint extends GuiLM implements IColorCallback, IFieldCallback
 {

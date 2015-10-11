@@ -2,12 +2,12 @@ package latmod.latmap.gui;
 
 import org.lwjgl.opengl.GL11;
 
-import latmod.core.util.LMColorUtils;
-import latmod.ftbu.api.LMGuis;
-import latmod.ftbu.api.callback.ClientTickCallback;
+import latmod.ftbu.api.client.LMGuis;
+import latmod.ftbu.api.client.callback.ClientTickCallback;
 import latmod.ftbu.util.client.*;
 import latmod.ftbu.util.gui.*;
 import latmod.latmap.wp.Waypoint;
+import latmod.lib.LMColorUtils;
 import net.minecraft.client.gui.GuiYesNo;
 
 public class PanelWaypoint extends PanelLM
