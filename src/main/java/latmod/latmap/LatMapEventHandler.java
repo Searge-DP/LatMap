@@ -16,7 +16,6 @@ import latmod.ftbu.mod.FTBUFinals;
 import latmod.ftbu.mod.client.gui.friends.PlayerAction;
 import latmod.ftbu.mod.client.minimap.*;
 import latmod.ftbu.notification.*;
-import latmod.ftbu.util.LatCoreMC;
 import latmod.ftbu.util.client.*;
 import latmod.ftbu.util.gui.GuiIcons;
 import latmod.ftbu.world.*;
@@ -30,7 +29,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.client.event.RenderWorldEvent;
 import net.minecraftforge.event.entity.EntityEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 public class LatMapEventHandler
 {
@@ -58,7 +56,7 @@ public class LatMapEventHandler
 		{
 			int rd = LatMapMOptions.zoomA[LatMapMOptions.zoom.getI()];
 			Minimap m = Minimap.get(e.entity.dimension);
-			m.reloadArea(e.entity.worldObj, e.newChunkX - MathHelperLM.floor(rd / 2D), e.newChunkZ - MathHelperLM.floor(rd / 2D), rd, rd);
+			m.requestArea(rd + 2);
 		}
 	}
 	
@@ -84,7 +82,7 @@ public class LatMapEventHandler
 		
 		int rd = LatMapMOptions.zoomA[LatMapMOptions.zoom.getI()];
 		Minimap m = Minimap.get(LatCoreMCClient.getDim());
-		m.reloadArea(LatCoreMCClient.mc.theWorld, MathHelperLM.chunk(LatCoreMCClient.mc.thePlayer.posX) - MathHelperLM.floor(rd / 2D), MathHelperLM.chunk(LatCoreMCClient.mc.thePlayer.posZ) - MathHelperLM.floor(rd / 2D), rd, rd);
+		m.requestArea(rd + 2);
 	}
 	
 	@SubscribeEvent
@@ -92,13 +90,6 @@ public class LatMapEventHandler
 	{
 		Minimap.save();
 		Waypoints.save();
-	}
-	
-	@SubscribeEvent
-	public void playerDied(LivingDeathEvent e)
-	{
-		if(e.entity instanceof EntityPlayer)
-			LatCoreMC.printChat((EntityPlayer)e.entity, "Remote: " + e.entity.worldObj.isRemote + ", Entity: " + e.entity);
 	}
 	
 	@SubscribeEvent
@@ -123,7 +114,8 @@ public class LatMapEventHandler
 			w.dim = ep.dimension;
 			w.setPos(ep.posX, ep.posY, ep.posZ);
 			w.type = WaypointType.BEACON;
-			w.color = LMColorUtils.getRGBA(LatCoreMC.rand.nextInt(100) + 155, LatCoreMC.rand.nextInt(100), 0, 255);
+			w.color = 0xFFFF3311;
+			w.deathpoint = true;
 			Waypoints.add(w);
 		}
 	}

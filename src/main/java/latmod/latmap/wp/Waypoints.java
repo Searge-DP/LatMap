@@ -61,7 +61,7 @@ public class Waypoints
 		{
 			waypoints.clear();
 			if(LMWorldClient.inst == null) return;
-			waypointsFile = LMFileUtils.newFile(new File(LMWorldClient.inst.clientDataFolder, "waypoints.json"));
+			waypointsFile = LMFileUtils.newFile(new File(LMWorldClient.inst.clientDataFolder, "latmap/waypoints.json"));
 			WaypointsFile wf = LMJsonUtils.fromJsonFile(waypointsFile, WaypointsFile.class);
 			if(wf != null)
 			{

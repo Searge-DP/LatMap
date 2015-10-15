@@ -1,7 +1,5 @@
 package latmod.latmap;
 
-import java.util.Comparator;
-
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -25,11 +23,13 @@ public class LatMapRenderHandler
 	public static final LatMapRenderHandler instance = new LatMapRenderHandler();
 	public static final MRenderer mapRenderer = new MRenderer();
 	public static final ResourceLocation texMarker = FTBU.mod.getLocation("textures/map/marker.png");
-	private static final FastList<WaypointClient> visibleBeacons = new FastList<WaypointClient>();
-	private static final FastList<WaypointClient> visibleMarkers = new FastList<WaypointClient>();
+	private static final FastList<RenderableWaypoint> visibleBeacons = new FastList<RenderableWaypoint>();
+	private static final FastList<RenderableWaypoint> visibleMarkers = new FastList<RenderableWaypoint>();
 	private static final FastList<String> stringList = new FastList<String>();
 	private static double far = 4D;
 	private static int beaconListID = -1;
+	private static long posHash = -1L;
+	private static int listSize = -1;
 	
 	@SubscribeEvent
 	public void renderMinimap(TickEvent.RenderTickEvent e)
@@ -85,25 +85,32 @@ public class LatMapRenderHandler
 	public void renderWorld(RenderWorldLastEvent e)
 	{
 		if(!LatCoreMCClient.isPlaying() || !Waypoints.enabled.getB() || Waypoints.waypoints.isEmpty()) return;
-		visibleBeacons.clear();
-		visibleMarkers.clear();
 		
-		double renderDistSq = Waypoints.renderDistanceSq[Waypoints.renderDistance.getI()];
-		
-		for(int i = 0; i < Waypoints.waypoints.size(); i++)
+		if(posHash != LMFrustrumUtils.playerPosHash || listSize != Waypoints.waypoints.size())
 		{
-			Waypoint w = Waypoints.waypoints.get(i);
-			if(w.enabled && w.dim == LMFrustrumUtils.currentDim)
+			posHash = LMFrustrumUtils.playerPosHash;
+			listSize = Waypoints.waypoints.size();
+			
+			visibleBeacons.clear();
+			visibleMarkers.clear();
+			
+			double renderDistSq = Waypoints.renderDistanceSq[Waypoints.renderDistance.getI()];
+			
+			for(int i = 0; i < listSize; i++)
 			{
-				double x = w.posX + 0.5D;
-				double y = w.posY + 0.5D;
-				double z = w.posZ + 0.5D;
-				double distSq = MathHelperLM.distSq(x, y, z, LMFrustrumUtils.playerX, LMFrustrumUtils.playerY, LMFrustrumUtils.playerZ);
-				
-				if(distSq <= renderDistSq)
+				Waypoint w = Waypoints.waypoints.get(i);
+				if(w.enabled && w.dim == LMFrustrumUtils.currentDim)
 				{
-					if(w.type.isMarker()) visibleMarkers.add(new WaypointClient(w, x, y, z, distSq));
-					else visibleBeacons.add(new WaypointClient(w, x, y, z, distSq));
+					double x = w.posX + 0.5D;
+					double y = w.posY + 0.5D;
+					double z = w.posZ + 0.5D;
+					double distSq = MathHelperLM.distSq(x, y, z, LMFrustrumUtils.playerX, LMFrustrumUtils.playerY, LMFrustrumUtils.playerZ);
+					
+					if(distSq <= renderDistSq)
+					{
+						if(w.type.isMarker()) visibleMarkers.add(new RenderableWaypoint(w, x, y, z, distSq, far));
+						else visibleBeacons.add(new RenderableWaypoint(w, x, y, z, distSq, far));
+					}
 				}
 			}
 		}
@@ -118,8 +125,8 @@ public class LatMapRenderHandler
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		
-		visibleMarkers.sort(WaypointComparator.instance);
-		visibleBeacons.sort(WaypointComparator.instance);
+		visibleMarkers.sort(RenderableWaypoint.comparator);
+		visibleBeacons.sort(RenderableWaypoint.comparator);
 		
 		Tessellator t = Tessellator.instance;
 		
@@ -133,7 +140,7 @@ public class LatMapRenderHandler
 			
 			for(int i = 0; i < visibleMarkers.size(); i++)
 			{
-				WaypointClient w = visibleMarkers.get(i);
+				RenderableWaypoint w = visibleMarkers.get(i);
 				
 				GL11.glPushMatrix();
 				GL11.glTranslated(w.closeRenderX, w.closeRenderY, w.closeRenderZ);
@@ -142,7 +149,7 @@ public class LatMapRenderHandler
 				GL11.glScaled(w.scale, -w.scale, -w.scale);
 				
 				t.startDrawingQuads();
-				t.setColorRGBA(w.colR, w.colG, w.colB, 255);
+				t.setColorRGBA(LMColorUtils.getRed(w.waypoint.color), LMColorUtils.getGreen(w.waypoint.color), LMColorUtils.getBlue(w.waypoint.color), 255);
 				t.addVertexWithUV(-0.5D, -0.5D, 0D, 0D, 0D);
 				t.addVertexWithUV(0.5D, -0.5D, 0D, 1D, 0D);
 				t.addVertexWithUV(0.5D, 0.5D, 0D, 1D, 1D);
@@ -177,15 +184,24 @@ public class LatMapRenderHandler
 				GL11.glEndList();
 			}
 			
+			//float deathPointTick = (float)(System.currentTimeMillis() * 0.0001D);
+			
 			for(int i = 0; i < visibleBeacons.size(); i++)
 			{
-				WaypointClient w = visibleBeacons.get(i);
+				RenderableWaypoint w = visibleBeacons.get(i);
 				
 				if(LMFrustrumUtils.frustrum.isBoxInFrustum(w.posX, 0D, w.posZ, w.posX + 1D, 256D, w.posZ + 1D))
 				{
 					GL11.glPushMatrix();
 					GL11.glTranslated(w.posX - LMFrustrumUtils.renderX, -LMFrustrumUtils.playerY, w.posZ - LMFrustrumUtils.renderZ);
-					GL11.glColor4f(w.colRF, w.colGF, w.colBF, 0.15F);
+					/*if(w.waypoint.deathpoint)
+					{
+						float h = (float)( (MathHelperLM.sin(deathPointTick + w.hashCode()) + 1D) / 2D * 0.1D);
+						int col = 0xFFFFFF;
+						GL11.glColor4f(LMColorUtils.getRedF(col), LMColorUtils.getGreenF(col), LMColorUtils.getBlueF(col), 0.15F);
+					}
+					else*/
+					GL11.glColor4f(LMColorUtils.getRedF(w.waypoint.color), LMColorUtils.getGreenF(w.waypoint.color), LMColorUtils.getBlueF(w.waypoint.color), 0.15F);
 					GL11.glCallList(beaconListID);
 					GL11.glPopMatrix();
 				}
@@ -207,12 +223,12 @@ public class LatMapRenderHandler
 			
 			for(int i = 0; i < visibleBeacons.size() + visibleMarkers.size(); i++)
 			{
-				WaypointClient w = (i >= visibleBeacons.size()) ? visibleMarkers.get(i - visibleBeacons.size()) : visibleBeacons.get(i);
+				RenderableWaypoint w = (i >= visibleBeacons.size()) ? visibleMarkers.get(i - visibleBeacons.size()) : visibleBeacons.get(i);
 				
-				if(displayDist || !w.name.isEmpty())
+				if(displayDist || !w.waypoint.name.isEmpty())
 				{
 					stringList.clear();
-					if(displayTitle && !w.name.isEmpty()) stringList.add(w.name);
+					if(displayTitle && !w.waypoint.name.isEmpty()) stringList.add(w.waypoint.name);
 					if(displayDist) stringList.add((int)(w.distance + 0.5D) + "m");
 					
 					if(stringList.isEmpty()) continue;
@@ -239,7 +255,7 @@ public class LatMapRenderHandler
 						t.addVertex(-l -1, y + 10, 0D);
 						t.draw();
 						GL11.glEnable(GL11.GL_TEXTURE_2D);
-						LatCoreMCClient.mc.fontRenderer.drawString(s, -l, (int)(y + 1D), 0xFFFFFFFF);
+						LatCoreMCClient.mc.fontRenderer.drawString(s, -l, (int)(y + 1D), w.waypoint.deathpoint  ? 0xFFFF1111 : 0xFFFFFFFF);
 					}
 					
 					GL11.glPopMatrix();
@@ -250,60 +266,5 @@ public class LatMapRenderHandler
 		}
 		
 		GL11.glPopAttrib();
-	}
-	
-	public static class WaypointClient
-	{
-		public final String name;
-		public final double posX, posY, posZ;
-		public final double closeRenderX, closeRenderY, closeRenderZ;
-		public final int colR, colG, colB;
-		public final float colRF, colGF, colBF;
-		public final double distance, scale;
-		
-		public WaypointClient(Waypoint w, double x, double y, double z, double dsq)
-		{
-			name = w.name;
-			colR = LMColorUtils.getRed(w.color);
-			colG = LMColorUtils.getGreen(w.color);
-			colB = LMColorUtils.getBlue(w.color);
-			colRF = colR / 255F;
-			colGF = colG / 255F;
-			colBF = colB / 255F;
-			posX = x;
-			posY = y;
-			posZ = z;
-			
-			distance = MathHelperLM.sqrt(dsq);
-			
-			double crX = posX - LMFrustrumUtils.renderX;
-			double crY = posY - LMFrustrumUtils.renderY;
-			double crZ = posZ - LMFrustrumUtils.renderZ;
-			
-			double d1 = MathHelperLM.sqrt3sq(crX, crY, crZ);
-			
-			if(d1 > far)
-			{
-				double d = far / d1;
-				crX *= d;
-				crY *= d;
-				crZ *= d;
-				d1 = far;
-			}
-			
-			closeRenderX = crX;
-			closeRenderY = crY;
-			closeRenderZ = crZ;
-			
-			scale = (d1 * 0.1D + 1D) * 0.4D;
-		}
-	}
-	
-	private static class WaypointComparator implements Comparator<WaypointClient>
-	{
-		public static final WaypointComparator instance = new WaypointComparator();
-		
-		public int compare(WaypointClient o1, WaypointClient o2)
-		{ return (o1.distance < o2.distance) ? 1 : -1; }
 	}
 }

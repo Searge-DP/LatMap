@@ -12,6 +12,8 @@ public class Waypoint
 	public WaypointType type = WaypointType.BEACON;
 	public int posX, posY, posZ, dim, color;
 	public int listID = -1;
+	public long created = System.currentTimeMillis();
+	public boolean deathpoint = false;
 	
 	public void setPos(double x, double y, double z)
 	{
@@ -24,7 +26,7 @@ public class Waypoint
 	{ return LMJsonUtils.toJson(this); }
 	
 	public int hashCode()
-	{ return listID; }
+	{ return Long.hashCode(created); }
 	
 	public Waypoint clone()
 	{
@@ -35,6 +37,8 @@ public class Waypoint
 		w.setPos(posX, posY, posZ);
 		w.dim = dim;
 		w.color = color;
+		w.created = created;
+		w.deathpoint = deathpoint;
 		return w;
 	}
 	
@@ -52,6 +56,8 @@ public class Waypoint
 			o.add("Z", new JsonPrimitive(src.posZ));
 			o.add("Dim", new JsonPrimitive(src.dim));
 			o.add("Col", new JsonPrimitive(LMColorUtils.getHex(src.color)));
+			o.add("Date", new JsonPrimitive(src.created));
+			if(src.deathpoint) o.add("deathpoint", new JsonPrimitive(true));
 			return o;
 		}
 		
@@ -68,6 +74,8 @@ public class Waypoint
 			w.posZ = o.get("Z").getAsInt();
 			w.dim = o.get("Dim").getAsInt();
 			w.color = Integer.decode(o.get("Col").getAsString());
+			w.created = o.get("Date").getAsLong();
+			w.deathpoint = o.has("deathpoint");
 			return w;
 		}
 	}
