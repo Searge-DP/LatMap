@@ -65,7 +65,7 @@ public class LatMapRenderHandler
 						Waypoint w = Waypoints.waypoints.get(i);
 						if(w.enabled && w.dim == LMFrustrumUtils.currentDim)
 						{
-							LatCoreMCClient.setColor(w.color, 255);
+							LatCoreMCClient.setGLColor(w.color, 255);
 							
 							double x = ((MathHelperLM.chunk(w.posX) - mapRenderer.startX) * 16D + MathHelperLM.wrap(w.posX, 16D)) * tsize / 16D;
 							double y = ((MathHelperLM.chunk(w.posZ) - mapRenderer.startY) * 16D + MathHelperLM.wrap(w.posZ, 16D)) * tsize / 16D;

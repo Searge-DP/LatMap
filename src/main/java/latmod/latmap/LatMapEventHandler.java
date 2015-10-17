@@ -9,9 +9,8 @@ import javax.imageio.ImageIO;
 import org.lwjgl.input.Keyboard;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
 import latmod.ftbu.api.*;
-import latmod.ftbu.api.client.EventPlayerAction;
+import latmod.ftbu.api.client.*;
 import latmod.ftbu.mod.FTBUFinals;
 import latmod.ftbu.mod.client.gui.friends.PlayerAction;
 import latmod.ftbu.mod.client.minimap.*;
@@ -121,17 +120,16 @@ public class LatMapEventHandler
 	}
 	
 	@SubscribeEvent
-	public void keyEvent(InputEvent.KeyInputEvent e)
+	public void onKeyPressed(EventFTBUKey e)
 	{
-		if(FTBUFinals.DEV && Keyboard.getEventKeyState())
+		if(FTBUFinals.DEV && e.pressed)
 		{
-			//LatCoreMC.printChat(null, Keyboard.getKeyName(Keyboard.getEventKey()));
+			//LatCoreMC.printChat(null, Keyboard.getKeyName(e.key));
 			
-			int key = Keyboard.getEventKey();
-			if(key == Keyboard.KEY_GRAVE)
+			if(e.key == Keyboard.KEY_GRAVE)
 			{
 			}
-			else if(key == Keyboard.KEY_MINUS)
+			else if(e.key == Keyboard.KEY_MINUS)
 			{
 				if(GuiScreen.isShiftKeyDown())
 				{
@@ -148,7 +146,7 @@ public class LatMapEventHandler
 				
 				LatCoreMCClient.playClickSound();
 			}
-			else if(key == Keyboard.KEY_EQUALS)
+			else if(e.key == Keyboard.KEY_EQUALS)
 			{
 				if(GuiScreen.isShiftKeyDown())
 				{
@@ -165,11 +163,11 @@ public class LatMapEventHandler
 				
 				LatCoreMCClient.playClickSound();
 			}
-			else if(key == Keyboard.KEY_M)
+			else if(e.key == Keyboard.KEY_M)
 			{
 				LatMapMOptions.renderIngame.onClicked();
 			}
-			else if(key == Keyboard.KEY_N)
+			else if(e.key == Keyboard.KEY_N)
 			{
 				File f = exportImage();
 				if(f != null)

@@ -107,7 +107,7 @@ public class PanelWaypoint extends PanelLM
 		boolean mouseOver = mouseOver();
 		GuiLM.drawBlankRect(0, ay, 0F, width, height, mouseOver ? 0x33FFFFFF : 0x33333333);
 		gui.drawString(gui.getFontRenderer(), waypoint.name, 4, ay + 5, waypoint.enabled ? 0xFFFFFFFF : 0xFF777777);
-		LatCoreMCClient.setColor(waypoint.color, 255);
+		LatCoreMCClient.setGLColor(waypoint.color, 255);
 		color.render(GuiIcons.color_blank);
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		type.render(waypoint.type.icon);
