@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import ftb.lib.client.FTBLibClient;
 import latmod.ftbu.mod.FTBU;
 import latmod.ftbu.mod.client.minimap.MRenderer;
 import latmod.ftbu.util.client.*;
@@ -36,7 +37,7 @@ public class LatMapRenderHandler
 	{
 		if(e.phase == TickEvent.Phase.END && LatCoreMCClient.isPlaying())
 		{
-			Minecraft mc = LatCoreMCClient.mc;
+			Minecraft mc = FTBLibClient.mc;
 			
 			if(!mc.gameSettings.showDebugInfo && LatMapMOptions.renderIngame.getI() > 0 && (mc.currentScreen == null || mc.currentScreen instanceof GuiChat))
 			{
@@ -56,7 +57,7 @@ public class LatMapRenderHandler
 				
 				if(!Waypoints.waypoints.isEmpty() && LatMapMOptions.waypoints.getB())
 				{
-					LatCoreMCClient.setTexture(texMarker);
+					FTBLibClient.setTexture(texMarker);
 					
 					double tsize = mapRenderer.size / (double)mapRenderer.tiles;
 					
@@ -65,7 +66,7 @@ public class LatMapRenderHandler
 						Waypoint w = Waypoints.waypoints.get(i);
 						if(w.enabled && w.dim == LMFrustrumUtils.currentDim)
 						{
-							LatCoreMCClient.setGLColor(w.color, 255);
+							FTBLibClient.setGLColor(w.color, 255);
 							
 							double x = ((MathHelperLM.chunk(w.posX) - mapRenderer.startX) * 16D + MathHelperLM.wrap(w.posX, 16D)) * tsize / 16D;
 							double y = ((MathHelperLM.chunk(w.posZ) - mapRenderer.startY) * 16D + MathHelperLM.wrap(w.posZ, 16D)) * tsize / 16D;
@@ -135,7 +136,7 @@ public class LatMapRenderHandler
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glDepthMask(false);
 			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-			LatCoreMCClient.setTexture(texMarker);
+			FTBLibClient.setTexture(texMarker);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			
 			for(int i = 0; i < visibleMarkers.size(); i++)
@@ -245,7 +246,7 @@ public class LatMapRenderHandler
 					{
 						double y = -2.5D + 11 * j;
 						String s = stringList.get(j);
-						int l = LatCoreMCClient.mc.fontRenderer.getStringWidth(s) / 2;
+						int l = FTBLibClient.mc.fontRenderer.getStringWidth(s) / 2;
 						GL11.glDisable(GL11.GL_TEXTURE_2D);
 						t.startDrawingQuads();
 						t.setColorRGBA_F(0F, 0F, 0F, 0.4F);
@@ -255,7 +256,7 @@ public class LatMapRenderHandler
 						t.addVertex(-l -1, y + 10, 0D);
 						t.draw();
 						GL11.glEnable(GL11.GL_TEXTURE_2D);
-						LatCoreMCClient.mc.fontRenderer.drawString(s, -l, (int)(y + 1D), w.waypoint.deathpoint  ? 0xFFFF1111 : 0xFFFFFFFF);
+						FTBLibClient.mc.fontRenderer.drawString(s, -l, (int)(y + 1D), w.waypoint.deathpoint  ? 0xFFFF1111 : 0xFFFFFFFF);
 					}
 					
 					GL11.glPopMatrix();

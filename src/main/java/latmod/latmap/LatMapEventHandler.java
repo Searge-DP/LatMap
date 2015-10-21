@@ -9,9 +9,9 @@ import javax.imageio.ImageIO;
 import org.lwjgl.input.Keyboard;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import ftb.lib.client.FTBLibClient;
 import latmod.ftbu.api.*;
 import latmod.ftbu.api.client.*;
-import latmod.ftbu.mod.FTBUFinals;
 import latmod.ftbu.mod.client.gui.friends.PlayerAction;
 import latmod.ftbu.mod.client.minimap.*;
 import latmod.ftbu.notification.*;
@@ -36,7 +36,7 @@ public class LatMapEventHandler
 	public static final PlayerAction waypoints = new PlayerAction(GuiIcons.compass)
 	{
 		public void onClicked(LMPlayerClient p)
-		{ LatCoreMCClient.mc.displayGuiScreen(new GuiWaypoints(LatCoreMCClient.mc.currentScreen)); }
+		{ FTBLibClient.mc.displayGuiScreen(new GuiWaypoints(FTBLibClient.mc.currentScreen)); }
 		
 		public String getTitle()
 		{ return Waypoints.clientConfig.getIDS(); }
@@ -68,7 +68,7 @@ public class LatMapEventHandler
 			int cz = MathHelperLM.chunk(e.renderer.posZ);
 			Minimap m = Minimap.get(LatCoreMCClient.getDim());
 			MChunk c = m.loadChunk(cx, cz);
-			c.reload(LatCoreMCClient.mc.theWorld);
+			c.reload(FTBLibClient.mc.theWorld);
 			//m.requestArea(1);
 		}
 	}
@@ -96,7 +96,7 @@ public class LatMapEventHandler
 	{
 		if(Waypoints.enabled.getB() && Waypoints.deathPoint.getB() && e.player.equalsPlayer(LMWorldClient.inst.clientPlayer))
 		{
-			EntityPlayer ep = LatCoreMCClient.mc.thePlayer;
+			EntityPlayer ep = FTBLibClient.mc.thePlayer;
 			Calendar c = Calendar.getInstance();
 			
 			StringBuilder sb = new StringBuilder();
@@ -122,10 +122,8 @@ public class LatMapEventHandler
 	@SubscribeEvent
 	public void onKeyPressed(EventFTBUKey e)
 	{
-		if(FTBUFinals.DEV && e.pressed)
+		if(e.pressed)
 		{
-			//LatCoreMC.printChat(null, Keyboard.getKeyName(e.key));
-			
 			if(e.key == Keyboard.KEY_GRAVE)
 			{
 			}
@@ -144,7 +142,7 @@ public class LatMapEventHandler
 						LatMapMOptions.zoom.setValue(i);
 				}
 				
-				LatCoreMCClient.playClickSound();
+				FTBLibClient.playClickSound();
 			}
 			else if(e.key == Keyboard.KEY_EQUALS)
 			{
@@ -161,7 +159,7 @@ public class LatMapEventHandler
 						LatMapMOptions.zoom.setValue(i);
 				}
 				
-				LatCoreMCClient.playClickSound();
+				FTBLibClient.playClickSound();
 			}
 			else if(e.key == Keyboard.KEY_M)
 			{

@@ -1,6 +1,7 @@
 package latmod.latmap;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import ftb.lib.EventBusHelper;
 import latmod.ftbu.util.*;
 import latmod.latmap.wp.*;
 import latmod.lib.LMJsonUtils;

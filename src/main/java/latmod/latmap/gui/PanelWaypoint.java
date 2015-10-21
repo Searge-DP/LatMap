@@ -2,13 +2,14 @@ package latmod.latmap.gui;
 
 import org.lwjgl.opengl.GL11;
 
+import ftb.lib.client.FTBLibClient;
 import latmod.ftbu.api.client.LMGuis;
 import latmod.ftbu.api.client.callback.ClientTickCallback;
 import latmod.ftbu.util.client.*;
 import latmod.ftbu.util.gui.*;
-import latmod.latmap.wp.Waypoint;
+import latmod.latmap.wp.*;
 import latmod.lib.LMColorUtils;
-import net.minecraft.client.gui.GuiYesNo;
+import net.minecraft.client.gui.*;
 
 public class PanelWaypoint extends PanelLM
 {
@@ -47,7 +48,7 @@ public class PanelWaypoint extends PanelLM
 				LatCoreMCClient.addClientTickCallback(new ClientTickCallback()
 				{
 					public void onCallback()
-					{ LatCoreMCClient.execClientCommand("/tpl " + waypoint.posX + " " + waypoint.posY + " " + waypoint.posZ); }
+					{ FTBLibClient.execClientCommand("/tpl " + waypoint.posX + " " + waypoint.posY + " " + waypoint.posZ); }
 				});
 				
 				gui.container.player.closeScreen();
@@ -84,7 +85,13 @@ public class PanelWaypoint extends PanelLM
 			public void onButtonPressed(int b)
 			{
 				gui.playClickSound();
-				gui.mc.displayGuiScreen(new GuiYesNo((GuiWaypoints)gui, FTBULang.deleteItem(waypoint.name), null, waypoint.listID));
+				
+				if(GuiScreen.isShiftKeyDown())
+				{
+					Waypoints.remove(waypoint.listID);
+					gui.refreshWidgets();
+				}
+				else gui.mc.displayGuiScreen(new GuiYesNo((GuiWaypoints)gui, FTBULang.deleteItem(waypoint.name), null, waypoint.listID));
 			}
 		};
 		
@@ -107,7 +114,7 @@ public class PanelWaypoint extends PanelLM
 		boolean mouseOver = mouseOver();
 		GuiLM.drawBlankRect(0, ay, 0F, width, height, mouseOver ? 0x33FFFFFF : 0x33333333);
 		gui.drawString(gui.getFontRenderer(), waypoint.name, 4, ay + 5, waypoint.enabled ? 0xFFFFFFFF : 0xFF777777);
-		LatCoreMCClient.setGLColor(waypoint.color, 255);
+		FTBLibClient.setGLColor(waypoint.color, 255);
 		color.render(GuiIcons.color_blank);
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		type.render(waypoint.type.icon);
