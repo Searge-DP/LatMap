@@ -27,7 +27,6 @@ public class LatMap
 		LMJsonUtils.register(Waypoint.class, new Waypoint.Serializer());
 		EventBusHelper.register(LatMapEventHandler.instance);
 		EventBusHelper.register(LatMapRenderHandler.instance);
-		LatMapMOptions.instance.init();
 		Waypoints.init();
 	}
 }

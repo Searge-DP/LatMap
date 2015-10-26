@@ -3,17 +3,12 @@ package latmod.latmap;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import ftb.lib.client.FTBLibClient;
 import latmod.ftbu.mod.FTBU;
-import latmod.ftbu.mod.client.minimap.MRenderer;
 import latmod.ftbu.util.client.*;
 import latmod.ftbu.util.client.model.CubeRenderer;
-import latmod.ftbu.util.gui.GuiLM;
 import latmod.latmap.wp.*;
 import latmod.lib.*;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -22,7 +17,6 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 public class LatMapRenderHandler
 {
 	public static final LatMapRenderHandler instance = new LatMapRenderHandler();
-	public static final MRenderer mapRenderer = new MRenderer();
 	public static final ResourceLocation texMarker = FTBU.mod.getLocation("textures/map/marker.png");
 	private static final FastList<RenderableWaypoint> visibleBeacons = new FastList<RenderableWaypoint>();
 	private static final FastList<RenderableWaypoint> visibleMarkers = new FastList<RenderableWaypoint>();
@@ -31,56 +25,6 @@ public class LatMapRenderHandler
 	private static int beaconListID = -1;
 	private static long posHash = -1L;
 	private static int listSize = -1;
-	
-	@SubscribeEvent
-	public void renderMinimap(TickEvent.RenderTickEvent e)
-	{
-		if(e.phase == TickEvent.Phase.END && LatCoreMCClient.isPlaying())
-		{
-			Minecraft mc = FTBLibClient.mc;
-			
-			if(!mc.gameSettings.showDebugInfo && LatMapMOptions.renderIngame.getI() > 0 && (mc.currentScreen == null || mc.currentScreen instanceof GuiChat))
-			{
-				mapRenderer.size = LatMapMOptions.sizeA[LatMapMOptions.size.getI()];
-				mapRenderer.renderX = (LatMapMOptions.renderIngame.getI() == 1) ? LatCoreMCClient.displayW - (mapRenderer.size + 3) : 4;
-				mapRenderer.renderY = 4;
-				mapRenderer.tiles = LatMapMOptions.zoomA[LatMapMOptions.zoom.getI()];
-				mapRenderer.startX = MathHelperLM.chunk(mc.thePlayer.posX) - MathHelperLM.floor(mapRenderer.tiles / 2D);
-				mapRenderer.startY = MathHelperLM.chunk(mc.thePlayer.posZ) - MathHelperLM.floor(mapRenderer.tiles / 2D);
-				mapRenderer.zLevel = -10F;
-				
-				mapRenderer.renderClaims = LatMapMOptions.claimedChunks.getB();
-				mapRenderer.renderGrid = LatMapMOptions.grid.getB();
-				mapRenderer.renderPlayers = LatMapMOptions.players.getB();
-				mapRenderer.renderAreaTitle = true;
-				mapRenderer.render();
-				
-				if(!Waypoints.waypoints.isEmpty() && LatMapMOptions.waypoints.getB())
-				{
-					FTBLibClient.setTexture(texMarker);
-					
-					double tsize = mapRenderer.size / (double)mapRenderer.tiles;
-					
-					for(int i = 0; i < Waypoints.waypoints.size(); i++)
-					{
-						Waypoint w = Waypoints.waypoints.get(i);
-						if(w.enabled && w.dim == LMFrustrumUtils.currentDim)
-						{
-							FTBLibClient.setGLColor(w.color, 255);
-							
-							double x = ((MathHelperLM.chunk(w.posX) - mapRenderer.startX) * 16D + MathHelperLM.wrap(w.posX, 16D)) * tsize / 16D;
-							double y = ((MathHelperLM.chunk(w.posZ) - mapRenderer.startY) * 16D + MathHelperLM.wrap(w.posZ, 16D)) * tsize / 16D;
-							
-							x = MathHelperLM.clamp(x, 0D, mapRenderer.size);
-							y = MathHelperLM.clamp(y, 0D, mapRenderer.size);
-							
-							GuiLM.drawTexturedRectD(mapRenderer.renderX + x - 2D, mapRenderer.renderY + y - 2D, mapRenderer.zLevel, 8, 8, 0D, 0D, 1D, 1D);
-						}
-					}
-				}
-			}
-		}
-	}
 	
 	@SubscribeEvent
 	public void renderWorld(RenderWorldLastEvent e)
