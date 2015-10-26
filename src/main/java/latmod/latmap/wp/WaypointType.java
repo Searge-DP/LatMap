@@ -1,6 +1,7 @@
 package latmod.latmap.wp;
 
-import latmod.ftbu.util.gui.*;
+import ftb.lib.client.TextureCoords;
+import latmod.ftbu.util.gui.GuiIcons;
 import latmod.latmap.LatMap;
 
 public enum WaypointType
