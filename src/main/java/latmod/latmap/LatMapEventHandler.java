@@ -48,7 +48,7 @@ public class LatMapEventHandler
 	@SubscribeEvent
 	public void playerDied(EventLMPlayerClient.PlayerDied e)
 	{
-		if(Waypoints.enabled.getB() && Waypoints.deathPoint.getB() && e.player.equalsPlayer(LMWorldClient.inst.clientPlayer))
+		if(Waypoints.enabled.getB() && Waypoints.deathPoint.getB() && e.player.playerID == LMWorldClient.inst.clientPlayerID)
 		{
 			EntityPlayer ep = FTBLibClient.mc.thePlayer;
 			Calendar c = Calendar.getInstance();

@@ -91,7 +91,7 @@ public class PanelWaypoint extends PanelLM
 					Waypoints.remove(waypoint.listID);
 					gui.refreshWidgets();
 				}
-				else gui.mc.displayGuiScreen(new GuiYesNo((GuiWaypoints)gui, FTBULang.deleteItem(waypoint.name), null, waypoint.listID));
+				else gui.mc.displayGuiScreen(new GuiYesNo((GuiWaypoints)gui, FTBULang.delete_item(waypoint.name), null, waypoint.listID));
 			}
 		};
 		
