@@ -3,11 +3,11 @@ package latmod.latmap;
 import java.util.Calendar;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import ftb.lib.api.gui.GuiIcons;
 import ftb.lib.client.FTBLibClient;
 import latmod.ftbu.api.*;
 import latmod.ftbu.api.client.EventPlayerAction;
-import latmod.ftbu.mod.client.gui.friends.PlayerAction;
-import latmod.ftbu.util.gui.GuiIcons;
+import latmod.ftbu.mod.client.gui.friends.PlayerSelfAction;
 import latmod.ftbu.world.*;
 import latmod.latmap.gui.GuiWaypoints;
 import latmod.latmap.wp.*;
@@ -18,7 +18,7 @@ public class LatMapEventHandler
 {
 	public static final LatMapEventHandler instance = new LatMapEventHandler();
 	
-	public static final PlayerAction waypoints = new PlayerAction(GuiIcons.compass)
+	public static final PlayerSelfAction waypoints = new PlayerSelfAction(GuiIcons.compass)
 	{
 		public void onClicked(LMPlayerClient p)
 		{ FTBLibClient.mc.displayGuiScreen(new GuiWaypoints(FTBLibClient.mc.currentScreen)); }

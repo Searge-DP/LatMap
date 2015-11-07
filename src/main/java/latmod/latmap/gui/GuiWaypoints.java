@@ -2,6 +2,7 @@ package latmod.latmap.gui;
 
 import org.lwjgl.opengl.GL11;
 
+import ftb.lib.api.gui.GuiIcons;
 import latmod.ftbu.api.client.callback.*;
 import latmod.ftbu.util.LatCoreMC;
 import latmod.ftbu.util.gui.*;
