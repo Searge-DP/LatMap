@@ -1,13 +1,12 @@
 package latmod.latmap.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import ftb.lib.api.gui.GuiIcons;
-import ftb.lib.client.FTBLibClient;
+import ftb.lib.client.*;
+import ftb.lib.gui.GuiLM;
+import ftb.lib.gui.widgets.*;
 import latmod.ftbu.api.client.LMGuis;
 import latmod.ftbu.api.client.callback.ClientTickCallback;
 import latmod.ftbu.util.client.*;
-import latmod.ftbu.util.gui.*;
 import latmod.latmap.wp.*;
 import latmod.lib.LMColorUtils;
 import net.minecraft.client.gui.*;
@@ -117,15 +116,15 @@ public class PanelWaypoint extends PanelLM
 		gui.drawString(gui.getFontRenderer(), waypoint.name, 4, ay + 5, waypoint.enabled ? 0xFFFFFFFF : 0xFF777777);
 		FTBLibClient.setGLColor(waypoint.color, 255);
 		color.render(GuiIcons.color_blank);
-		GL11.glColor4f(1F, 1F, 1F, 1F);
+		GlStateManager.color(1F, 1F, 1F, 1F);
 		type.render(waypoint.type.icon);
 		if(mouseOver) teleport.render(GuiIcons.compass);
 		if(delete.mouseOver()) delete.render(GuiIcons.remove);
 		else
 		{
-			GL11.glColor4f(1F, 1F, 1F, 0.2F);
+			GlStateManager.color(1F, 1F, 1F, 0.2F);
 			delete.render(GuiIcons.remove_gray);
-			GL11.glColor4f(1F, 1F, 1F, 1F);
+			GlStateManager.color(1F, 1F, 1F, 1F);
 		}
 		
 		if(edit.mouseOver())

@@ -1,11 +1,11 @@
 package latmod.latmap.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import ftb.lib.api.gui.GuiIcons;
+import ftb.lib.client.GlStateManager;
+import ftb.lib.gui.GuiLM;
+import ftb.lib.gui.widgets.ButtonLM;
 import latmod.ftbu.api.client.callback.*;
 import latmod.ftbu.util.LatCoreMC;
-import latmod.ftbu.util.gui.*;
 import latmod.latmap.wp.*;
 import net.minecraft.client.gui.*;
 
@@ -91,9 +91,9 @@ public class GuiWaypoints extends GuiLM implements IColorCallback, GuiYesNoCallb
 		drawBlankRect(0, 0, zLevel, width, 20, 0x99333333);
 		drawCenteredString(getFontRenderer(), Waypoints.clientConfig.getIDS(), width / 2, 6, 0xFFFFFFFF);
 		
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glColor4f(1F, 1F, 1F, 1F);
+		GlStateManager.disableLighting();
+		GlStateManager.enableBlend();
+		GlStateManager.color(1F, 1F, 1F, 1F);
 		
 		buttonClose.render(GuiIcons.accept);
 		buttonAdd.render(GuiIcons.add);

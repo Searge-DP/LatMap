@@ -1,10 +1,11 @@
 package latmod.latmap.gui;
 
+import ftb.lib.gui.GuiLM;
+import ftb.lib.gui.widgets.*;
 import latmod.ftbu.api.client.LMGuis;
 import latmod.ftbu.api.client.callback.*;
 import latmod.ftbu.util.LatCoreMC;
 import latmod.ftbu.util.client.FTBULang;
-import latmod.ftbu.util.gui.*;
 import latmod.latmap.wp.*;
 import latmod.lib.LMColorUtils;
 

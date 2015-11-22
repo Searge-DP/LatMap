@@ -3,13 +3,13 @@ package latmod.latmap;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import ftb.lib.client.FTBLibClient;
+import ftb.lib.client.*;
 import latmod.ftbu.mod.FTBU;
 import latmod.ftbu.util.client.*;
 import latmod.ftbu.util.client.model.CubeRenderer;
 import latmod.latmap.wp.*;
 import latmod.lib.*;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -65,10 +65,10 @@ public class LatMapRenderHandler
 		
 		if(!hasMarkers && !hasBeacons) return;
 		
-		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GlStateManager.pushAttrib();
+		GlStateManager.enableBlend();
+		GlStateManager.disableLighting();
+		GlStateManager.enableTexture();
 		
 		visibleMarkers.sort(RenderableWaypoint.comparator);
 		visibleBeacons.sort(RenderableWaypoint.comparator);
@@ -77,21 +77,21 @@ public class LatMapRenderHandler
 		
 		if(hasMarkers && LMFrustrumUtils.isFirstPerson)
 		{
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
-			GL11.glDepthMask(false);
-			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+			GlStateManager.disableDepth();
+			GlStateManager.depthMask(false);
+			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			FTBLibClient.setTexture(texMarker);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GlStateManager.enableTexture();
 			
 			for(int i = 0; i < visibleMarkers.size(); i++)
 			{
 				RenderableWaypoint w = visibleMarkers.get(i);
 				
-				GL11.glPushMatrix();
-				GL11.glTranslated(w.closeRenderX, w.closeRenderY, w.closeRenderZ);
-				GL11.glRotatef(-RenderManager.instance.playerViewY, 0F, 1F, 0F);
-				GL11.glRotatef(RenderManager.instance.playerViewX, 1F, 0F, 0F);
-				GL11.glScaled(w.scale, -w.scale, -w.scale);
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(w.closeRenderX, w.closeRenderY, w.closeRenderZ);
+				GlStateManager.rotate(-RenderManager.instance.playerViewY, 0F, 1F, 0F);
+				GlStateManager.rotate(RenderManager.instance.playerViewX, 1F, 0F, 0F);
+				GlStateManager.scale(w.scale, -w.scale, -w.scale);
 				
 				t.startDrawingQuads();
 				t.setColorRGBA(LMColorUtils.getRed(w.waypoint.color), LMColorUtils.getGreen(w.waypoint.color), LMColorUtils.getBlue(w.waypoint.color), 255);
@@ -101,24 +101,24 @@ public class LatMapRenderHandler
 				t.addVertexWithUV(-0.5D, 0.5D, 0D, 0D, 1D);
 				t.draw();
 				
-				GL11.glPopMatrix();
+				GlStateManager.popMatrix();
 			}
 			
-			GL11.glDepthMask(true);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			GlStateManager.depthMask(true);
+			GlStateManager.enableDepth();
 		}
 		
 		if(hasBeacons)
 		{
-			GL11.glDisable(GL11.GL_CULL_FACE);
-			GL11.glDepthMask(false);
-			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+			GlStateManager.disableCull();
+			GlStateManager.depthMask(false);
+			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			//OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, 1, 0);
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GlStateManager.disableTexture();
 			
 			if(beaconListID == -1)
 			{
-				GL11.glColor4f(1F, 1F, 1F, 1F);
+				GlStateManager.color(1F, 1F, 1F, 1F);
 				beaconListID = GL11.glGenLists(1);
 				GL11.glNewList(beaconListID, GL11.GL_COMPILE);
 				CubeRenderer cr = new CubeRenderer();
@@ -137,8 +137,8 @@ public class LatMapRenderHandler
 				
 				if(LMFrustrumUtils.frustrum.isBoxInFrustum(w.posX, 0D, w.posZ, w.posX + 1D, 256D, w.posZ + 1D))
 				{
-					GL11.glPushMatrix();
-					GL11.glTranslated(w.posX - LMFrustrumUtils.renderX, -LMFrustrumUtils.playerY, w.posZ - LMFrustrumUtils.renderZ);
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(w.posX - LMFrustrumUtils.renderX, -LMFrustrumUtils.playerY, w.posZ - LMFrustrumUtils.renderZ);
 					/*if(w.waypoint.deathpoint)
 					{
 						float h = (float)( (MathHelperLM.sin(deathPointTick + w.hashCode()) + 1D) / 2D * 0.1D);
@@ -146,13 +146,13 @@ public class LatMapRenderHandler
 						GL11.glColor4f(LMColorUtils.getRedF(col), LMColorUtils.getGreenF(col), LMColorUtils.getBlueF(col), 0.15F);
 					}
 					else*/
-					GL11.glColor4f(LMColorUtils.getRedF(w.waypoint.color), LMColorUtils.getGreenF(w.waypoint.color), LMColorUtils.getBlueF(w.waypoint.color), 0.15F);
+					GlStateManager.color(LMColorUtils.getRedF(w.waypoint.color), LMColorUtils.getGreenF(w.waypoint.color), LMColorUtils.getBlueF(w.waypoint.color), 0.15F);
 					GL11.glCallList(beaconListID);
-					GL11.glPopMatrix();
+					GlStateManager.popMatrix();
 				}
 			}
 			
-			GL11.glDepthMask(true);
+			GlStateManager.depthMask(true);
 		}
 		
 		boolean displayTitle = Waypoints.displayTitle.getB();
@@ -160,11 +160,11 @@ public class LatMapRenderHandler
 		
 		if((displayTitle || displayDist) && LMFrustrumUtils.isFirstPerson)
 		{
-			GL11.glColor4f(1F, 1F, 1F, 1F);
-			GL11.glDisable(GL11.GL_CULL_FACE);
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
-			GL11.glDepthMask(false);
-			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+			GlStateManager.color(1F, 1F, 1F, 1F);
+			GlStateManager.disableCull();
+			GlStateManager.disableDepth();
+			GlStateManager.depthMask(false);
+			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			
 			for(int i = 0; i < visibleBeacons.size() + visibleMarkers.size(); i++)
 			{
@@ -178,20 +178,20 @@ public class LatMapRenderHandler
 					
 					if(stringList.isEmpty()) continue;
 					
-					GL11.glPushMatrix();
-					GL11.glTranslated(w.closeRenderX, w.closeRenderY + 0.5D, w.closeRenderZ);
-					GL11.glRotatef(-RenderManager.instance.playerViewY, 0F, 1F, 0F);
-					GL11.glRotatef(RenderManager.instance.playerViewX, 1F, 0F, 0F);
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(w.closeRenderX, w.closeRenderY + 0.5D, w.closeRenderZ);
+					GlStateManager.rotate(-RenderManager.instance.playerViewY, 0F, 1F, 0F);
+					GlStateManager.rotate(RenderManager.instance.playerViewX, 1F, 0F, 0F);
 					GL11.glNormal3f(0F, 1F, 0F);
 					float f1 = 0.0125F;
-					GL11.glScalef(-f1, -f1, f1);
+					GlStateManager.scale(-f1, -f1, f1);
 					
 					for(int j = 0; j < stringList.size(); j++)
 					{
 						double y = -2.5D + 11 * j;
 						String s = stringList.get(j);
 						int l = FTBLibClient.mc.fontRenderer.getStringWidth(s) / 2;
-						GL11.glDisable(GL11.GL_TEXTURE_2D);
+						GlStateManager.disableTexture();
 						t.startDrawingQuads();
 						t.setColorRGBA_F(0F, 0F, 0F, 0.4F);
 						t.addVertex(-l -1, y, 0D);
@@ -199,17 +199,17 @@ public class LatMapRenderHandler
 						t.addVertex(l + 1, y + 10, 0D);
 						t.addVertex(-l -1, y + 10, 0D);
 						t.draw();
-						GL11.glEnable(GL11.GL_TEXTURE_2D);
+						GlStateManager.enableTexture();
 						FTBLibClient.mc.fontRenderer.drawString(s, -l, (int)(y + 1D), w.waypoint.deathpoint  ? 0xFFFF1111 : 0xFFFFFFFF);
 					}
 					
-					GL11.glPopMatrix();
+					GlStateManager.popMatrix();
 				}
 			}
 			
-			GL11.glDepthMask(true);
+			GlStateManager.depthMask(true);
 		}
 		
-		GL11.glPopAttrib();
+		GlStateManager.popAttrib();
 	}
 }

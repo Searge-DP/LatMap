@@ -1,6 +1,6 @@
 package latmod.latmap.gui;
 
-import latmod.ftbu.util.gui.PanelLM;
+import ftb.lib.gui.widgets.PanelLM;
 import latmod.latmap.wp.*;
 
 public class PanelWaypointList extends PanelLM
