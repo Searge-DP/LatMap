@@ -1,11 +1,10 @@
 package latmod.latmap.gui;
 
+import ftb.lib.api.gui.*;
+import ftb.lib.api.gui.callback.*;
 import ftb.lib.gui.GuiLM;
 import ftb.lib.gui.widgets.*;
-import latmod.ftbu.api.client.LMGuis;
-import latmod.ftbu.api.client.callback.*;
 import latmod.ftbu.util.LatCoreMC;
-import latmod.ftbu.util.client.FTBULang;
 import latmod.latmap.wp.*;
 import latmod.lib.LMColorUtils;
 
@@ -114,7 +113,7 @@ public class GuiEditWaypoint extends GuiLM implements IColorCallback, IFieldCall
 			}
 		};
 		
-		buttonCancel.title = FTBULang.button_cancel();
+		buttonCancel.title = FTBLibLang.button_cancel();
 		
 		buttonAdd = new ButtonSimpleLM(this, xSize - buttonSize - 2, buttonY, buttonSize, 16)
 		{
@@ -127,7 +126,7 @@ public class GuiEditWaypoint extends GuiLM implements IColorCallback, IFieldCall
 			}
 		};
 		
-		buttonAdd.title = (w == null) ? FTBULang.button_add() : FTBULang.button_save();
+		buttonAdd.title = (w == null) ? FTBLibLang.button_add() : FTBLibLang.button_save();
 	}
 	
 	public void initLMGui()
@@ -156,7 +155,7 @@ public class GuiEditWaypoint extends GuiLM implements IColorCallback, IFieldCall
 	public void drawBackground()
 	{
 		GuiLM.drawBlankRect(guiLeft, guiTop, zLevel, xSize, ySize, 0xFF333333);
-		drawCenteredString(getFontRenderer(), Waypoints.clientConfig.getIDS(), width / 2, 6, 0xFFFFFFFF);
+		drawCenteredString(getFontRenderer(), "Waypoints", width / 2, 6, 0xFFFFFFFF); // LANG
 		
 		//GL11.glDisable(GL11.GL_LIGHTING);
 		//GL11.glEnable(GL11.GL_BLEND);

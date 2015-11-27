@@ -24,7 +24,7 @@ public class LatMapEventHandler
 		{ FTBLibClient.mc.displayGuiScreen(new GuiWaypoints(FTBLibClient.mc.currentScreen)); }
 		
 		public String getTitle()
-		{ return Waypoints.clientConfig.getIDS(); }
+		{ return "Waypoints"; } //LANG
 	};
 	
 	@SubscribeEvent
@@ -48,7 +48,7 @@ public class LatMapEventHandler
 	@SubscribeEvent
 	public void playerDied(EventLMPlayerClient.PlayerDied e)
 	{
-		if(Waypoints.enabled.getB() && Waypoints.deathPoint.getB() && e.player.playerID == LMWorldClient.inst.clientPlayerID)
+		if(Waypoints.enabled.get() && Waypoints.deathPoint.get() && e.player.playerID == LMWorldClient.inst.clientPlayerID)
 		{
 			EntityPlayer ep = FTBLibClient.mc.thePlayer;
 			Calendar c = Calendar.getInstance();

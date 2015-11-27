@@ -4,29 +4,30 @@ import java.io.File;
 import java.util.ArrayList;
 
 import cpw.mods.fml.relauncher.*;
-import latmod.ftbu.api.client.*;
+import ftb.lib.api.config.ClientConfigRegistry;
 import latmod.ftbu.world.LMWorldClient;
 import latmod.lib.*;
+import latmod.lib.config.*;
+import latmod.lib.util.FloatBounds;
 
 @SideOnly(Side.CLIENT)
 public class Waypoints
 {
-	public static final ClientConfig clientConfig = new ClientConfig("waypoints");
-	public static final ClientConfigProperty enabled = new ClientConfigProperty("enabled", 0, "false", "true");
-	public static final ClientConfigProperty waypointType = new ClientConfigProperty("waypoint_type", 1, "marker", "beacon");
-	public static final ClientConfigProperty displayTitle = new ClientConfigProperty("display_title", true);
-	public static final ClientConfigProperty displayDist = new ClientConfigProperty("display_distance", false);
-	public static final ClientConfigProperty renderDistance = new ClientConfigProperty("render_distance", 2, "300", "600", "1200", "2500", "10000").setRawValues();
-	public static final ClientConfigProperty deathPoint = new ClientConfigProperty("death_point", true);
+	public static final ConfigGroup clientConfig = new ConfigGroup("waypoints");
+	public static final ConfigEntryBool enabled = new ConfigEntryBool("enabled", true);
+	public static final ConfigEntryEnum<WaypointType> waypointType = new ConfigEntryEnum<WaypointType>("waypoint_type", WaypointType.class, WaypointType.BEACON);
+	public static final ConfigEntryBool displayTitle = new ConfigEntryBool("display_title", true);
+	public static final ConfigEntryBool displayDist = new ConfigEntryBool("display_distance", false);
+	public static final ConfigEntryFloat renderDistance = new ConfigEntryFloat("render_distance", new FloatBounds(2500F, 300F, 100000F));
+	public static final ConfigEntryBool deathPoint = new ConfigEntryBool("death_point", true);
 	public static final FastList<Waypoint> waypoints = new FastList<Waypoint>();
 	
-	public static final double[] renderDistanceSq = { 300D * 300D, 600D * 600D, 1200D * 1200D, 2500D * 2500D, 10000D * 10000D };
 	private static File waypointsFile;
 	
 	public static void init()
 	{
 		clientConfig.add(enabled);
-		//clientConfig.add(waypointType);
+		clientConfig.add(waypointType);
 		clientConfig.add(displayTitle);
 		clientConfig.add(displayDist);
 		clientConfig.add(renderDistance);

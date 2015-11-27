@@ -29,7 +29,7 @@ public class LatMapRenderHandler
 	@SubscribeEvent
 	public void renderWorld(RenderWorldLastEvent e)
 	{
-		if(!LatCoreMCClient.isPlaying() || !Waypoints.enabled.getB() || Waypoints.waypoints.isEmpty()) return;
+		if(!LatCoreMCClient.isPlaying() || !Waypoints.enabled.get() || Waypoints.waypoints.isEmpty()) return;
 		
 		if(posHash != LMFrustrumUtils.playerPosHash || listSize != Waypoints.waypoints.size())
 		{
@@ -39,7 +39,7 @@ public class LatMapRenderHandler
 			visibleBeacons.clear();
 			visibleMarkers.clear();
 			
-			double renderDistSq = Waypoints.renderDistanceSq[Waypoints.renderDistance.getI()];
+			double renderDistSq = Waypoints.renderDistance.get() * Waypoints.renderDistance.get();
 			
 			for(int i = 0; i < listSize; i++)
 			{
@@ -155,8 +155,8 @@ public class LatMapRenderHandler
 			GlStateManager.depthMask(true);
 		}
 		
-		boolean displayTitle = Waypoints.displayTitle.getB();
-		boolean displayDist = Waypoints.displayDist.getB();
+		boolean displayTitle = Waypoints.displayTitle.get();
+		boolean displayDist = Waypoints.displayDist.get();
 		
 		if((displayTitle || displayDist) && LMFrustrumUtils.isFirstPerson)
 		{

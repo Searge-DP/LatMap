@@ -1,12 +1,10 @@
 package latmod.latmap.gui;
 
-import ftb.lib.api.gui.GuiIcons;
+import ftb.lib.api.gui.*;
+import ftb.lib.api.gui.callback.ClientTickCallback;
 import ftb.lib.client.*;
 import ftb.lib.gui.GuiLM;
 import ftb.lib.gui.widgets.*;
-import latmod.ftbu.api.client.LMGuis;
-import latmod.ftbu.api.client.callback.ClientTickCallback;
-import latmod.ftbu.util.client.*;
 import latmod.latmap.wp.*;
 import latmod.lib.LMColorUtils;
 import net.minecraft.client.gui.*;
@@ -37,7 +35,7 @@ public class PanelWaypoint extends PanelLM
 			}
 		};
 		
-		edit.title = FTBULang.button_settings();
+		edit.title = FTBLibLang.button_settings();
 		
 		teleport = new ButtonLM(p.gui, width - 72, 1, 16, 16)
 		{
@@ -45,7 +43,7 @@ public class PanelWaypoint extends PanelLM
 			{
 				gui.playClickSound();
 				
-				LatCoreMCClient.addClientTickCallback(new ClientTickCallback()
+				FTBLibClient.addClientTickCallback(new ClientTickCallback()
 				{
 					public void onCallback()
 					{ FTBLibClient.execClientCommand("/tpl " + waypoint.posX + " " + waypoint.posY + " " + waypoint.posZ); }
@@ -91,11 +89,11 @@ public class PanelWaypoint extends PanelLM
 					Waypoints.remove(waypoint.listID);
 					gui.refreshWidgets();
 				}
-				else gui.mc.displayGuiScreen(new GuiYesNo((GuiWaypoints)gui, FTBULang.delete_item(waypoint.name), null, waypoint.listID));
+				else gui.mc.displayGuiScreen(new GuiYesNo((GuiWaypoints)gui, FTBLibLang.delete_item(waypoint.name), null, waypoint.listID));
 			}
 		};
 		
-		delete.title = FTBULang.button_remove();
+		delete.title = FTBLibLang.button_remove();
 	}
 	
 	public void addWidgets()
