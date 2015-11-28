@@ -15,7 +15,6 @@ public class Waypoints
 {
 	public static final ConfigGroup clientConfig = new ConfigGroup("waypoints");
 	public static final ConfigEntryBool enabled = new ConfigEntryBool("enabled", true);
-	public static final ConfigEntryEnum<WaypointType> waypointType = new ConfigEntryEnum<WaypointType>("waypoint_type", WaypointType.class, WaypointType.BEACON);
 	public static final ConfigEntryBool displayTitle = new ConfigEntryBool("display_title", true);
 	public static final ConfigEntryBool displayDist = new ConfigEntryBool("display_distance", false);
 	public static final ConfigEntryFloat renderDistance = new ConfigEntryFloat("render_distance", new FloatBounds(2500F, 300F, 100000F));
@@ -27,7 +26,6 @@ public class Waypoints
 	public static void init()
 	{
 		clientConfig.add(enabled);
-		clientConfig.add(waypointType);
 		clientConfig.add(displayTitle);
 		clientConfig.add(displayDist);
 		clientConfig.add(renderDistance);
@@ -61,7 +59,7 @@ public class Waypoints
 		try
 		{
 			waypoints.clear();
-			if(LMWorldClient.inst == null) return;
+			if(LMWorldClient.inst == null || LMWorldClient.inst.clientDataFolder == null) return;
 			waypointsFile = LMFileUtils.newFile(new File(LMWorldClient.inst.clientDataFolder, "latmap/waypoints.json"));
 			WaypointsFile wf = LMJsonUtils.fromJsonFile(waypointsFile, WaypointsFile.class);
 			if(wf != null)
@@ -80,7 +78,7 @@ public class Waypoints
 	{
 		try
 		{
-			if(LMWorldClient.inst == null) return;
+			if(LMWorldClient.inst == null || waypointsFile == null) return;
 			WaypointsFile wf = new WaypointsFile();
 			wf.waypoints = new ArrayList<Waypoint>();
 			wf.waypoints.addAll(waypoints);
