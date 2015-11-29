@@ -2,9 +2,10 @@ package latmod.latmap;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import ftb.lib.EventBusHelper;
-import latmod.ftbu.util.*;
+import latmod.ftbu.util.LMMod;
 import latmod.latmap.wp.*;
 import latmod.lib.LMJsonUtils;
+import net.minecraft.client.Minecraft;
 
 @Mod(modid = LatMap.MOD_ID, name = "LatMap", version = "@VERSION@", dependencies = "required-after:FTBU") 
 public class LatMap
@@ -21,8 +22,7 @@ public class LatMap
 	public void preInit(FMLPreInitializationEvent e)
 	{
 		LMMod.init(this);
-		if(LatCoreMC.isDedicatedServer())
-			throw new RuntimeException("LatMap can only run on client side!");
+		Minecraft.getMinecraft();
 		
 		LMJsonUtils.register(Waypoint.class, new Waypoint.Serializer());
 		EventBusHelper.register(LatMapEventHandler.instance);
