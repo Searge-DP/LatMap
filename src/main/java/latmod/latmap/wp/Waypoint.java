@@ -49,14 +49,18 @@ public class Waypoint
 			if(src == null) return null;
 			JsonObject o = new JsonObject();
 			o.add("Name", new JsonPrimitive(src.name));
-			o.add("On", new JsonPrimitive(src.enabled ? 1 : 0));
-			o.add("Type", new JsonPrimitive(src.type.ID));
-			o.add("X", new JsonPrimitive(src.posX));
-			o.add("Y", new JsonPrimitive(src.posY));
-			o.add("Z", new JsonPrimitive(src.posZ));
-			o.add("Dim", new JsonPrimitive(src.dim));
-			o.add("Col", new JsonPrimitive(LMColorUtils.getHex(src.color)));
-			o.add("Date", new JsonPrimitive(src.created));
+			if(!src.enabled) o.add("disabled", new JsonPrimitive(true));
+			if(src.type.isMarker()) o.add("marker", new JsonPrimitive(true));
+			
+			JsonArray posA = new JsonArray();
+			posA.add(new JsonPrimitive(src.posX));
+			posA.add(new JsonPrimitive(src.posY));
+			posA.add(new JsonPrimitive(src.posZ));
+			o.add("pos", posA);
+			
+			o.add("dim", new JsonPrimitive(src.dim));
+			o.add("col", new JsonPrimitive(LMColorUtils.getHex(src.color)));
+			o.add("date", new JsonPrimitive(src.created));
 			if(src.deathpoint) o.add("deathpoint", new JsonPrimitive(true));
 			return o;
 		}
@@ -66,16 +70,18 @@ public class Waypoint
 			if(json.isJsonNull()) return null;
 			JsonObject o = json.getAsJsonObject();
 			Waypoint w = new Waypoint();
-			w.name = o.get("Name").getAsString();
-			w.enabled = o.get("On").getAsInt() == 1;
-			w.type = WaypointType.get(o.get("Type").getAsString());
-			w.posX = o.get("X").getAsInt();
-			w.posY = o.get("Y").getAsInt();
-			w.posZ = o.get("Z").getAsInt();
-			w.dim = o.get("Dim").getAsInt();
-			w.color = Integer.decode(o.get("Col").getAsString());
-			w.created = o.get("Date").getAsLong();
-			w.deathpoint = o.has("deathpoint");
+			w.name = o.get("name").getAsString();
+			w.enabled = o.has("disabled") ? !o.get("disabled").getAsBoolean() : true;
+			w.type = WaypointType.get(o.has("marker") ? o.get("marker").getAsBoolean() : false);
+			
+			JsonArray posA = o.get("pos").getAsJsonArray();
+			w.posX = posA.get(0).getAsInt();
+			w.posY = posA.get(1).getAsInt();
+			w.posZ = posA.get(2).getAsInt();
+			w.dim = o.get("dim").getAsInt();
+			w.color = Integer.decode(o.get("col").getAsString());
+			w.created = o.get("date").getAsLong();
+			w.deathpoint = o.has("death") ? o.get("death").getAsBoolean() : false;
 			return w;
 		}
 	}

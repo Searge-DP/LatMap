@@ -3,34 +3,40 @@ package latmod.latmap;
 import java.util.Calendar;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import ftb.lib.api.*;
 import ftb.lib.api.gui.GuiIcons;
 import ftb.lib.client.FTBLibClient;
 import latmod.ftbu.api.*;
-import latmod.ftbu.api.client.EventPlayerAction;
-import latmod.ftbu.mod.client.gui.friends.PlayerSelfAction;
-import latmod.ftbu.world.*;
+import latmod.ftbu.util.client.LatCoreMCClient;
+import latmod.ftbu.world.LMWorldClient;
 import latmod.latmap.gui.GuiWaypoints;
 import latmod.latmap.wp.*;
 import latmod.lib.LMStringUtils;
+import latmod.lib.config.ConfigEntryBool;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class LatMapEventHandler
 {
 	public static final LatMapEventHandler instance = new LatMapEventHandler();
+	public static final ConfigEntryBool button_waypoints = new ConfigEntryBool("waypoints", false);
 	
-	public static final PlayerSelfAction waypoints = new PlayerSelfAction(GuiIcons.compass)
+	public static final PlayerAction waypoints = new PlayerAction(GuiIcons.compass)
 	{
-		public void onClicked(LMPlayerClient p)
+		public void onClicked(int playerID)
 		{ FTBLibClient.mc.displayGuiScreen(new GuiWaypoints(FTBLibClient.mc.currentScreen)); }
 		
 		public String getTitle()
-		{ return "Waypoints"; } //LANG
+		{ return I18n.format("client_config.sidebar_buttons.waypoint"); }
 	};
 	
 	@SubscribeEvent
-	public void onPlayerActionEvent(EventPlayerAction e)
+	public void onEvent(EventPlayerActionButtons e)
 	{
-		if(e.isSelf) e.actions.add(waypoints);
+		if(e.self && LatCoreMCClient.isPlaying())
+		{
+			if(e.addAll || button_waypoints.get()) e.actions.add(waypoints);
+		}
 	}
 	
 	@SubscribeEvent

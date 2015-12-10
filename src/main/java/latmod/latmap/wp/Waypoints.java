@@ -67,11 +67,12 @@ public class Waypoints
 				waypoints.addAll(wf.waypoints);
 				for(int i = 0; i < waypoints.size(); i++)
 					waypoints.get(i).listID = i;
-				save();
 			}
 		}
 		catch(Exception e)
 		{ e.printStackTrace(); }
+		
+		save();
 	}
 	
 	public static void save()

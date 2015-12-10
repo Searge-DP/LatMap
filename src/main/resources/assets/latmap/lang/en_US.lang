@@ -1,9 +1,11 @@
+client_config.sidebar_buttons.waypoint=Waypoints
 client_config.waypoints=Waypoints
 client_config.waypoints.waypoint_type=Waypoint Type
 client_config.waypoints.display_title=Display Title
 client_config.waypoints.display_distance=Display Distance
 client_config.waypoints.render_distance=Render Distance
 client_config.waypoints.death_point=Death Point
+client_config.waypoints.enabled=Enabled
 
 client_config.minimap=Minimap
 client_config.minimap.render_ingame=Render Ingame

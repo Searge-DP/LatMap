@@ -155,7 +155,7 @@ public class GuiEditWaypoint extends GuiLM implements IColorCallback, IFieldCall
 	public void drawBackground()
 	{
 		GuiLM.drawBlankRect(guiLeft, guiTop, zLevel, xSize, ySize, 0xFF333333);
-		drawCenteredString(getFontRenderer(), "Waypoints", width / 2, 6, 0xFFFFFFFF); // LANG
+		drawCenteredString(getFontRenderer(), "Waypoints", width / 2, 6, 0xFFFFFFFF); // LANG: Waypoints
 		
 		//GL11.glDisable(GL11.GL_LIGHTING);
 		//GL11.glEnable(GL11.GL_BLEND);
