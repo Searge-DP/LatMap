@@ -8,7 +8,7 @@ import ftb.lib.api.config.ClientConfigRegistry;
 import latmod.ftbu.world.LMWorldClient;
 import latmod.lib.*;
 import latmod.lib.config.*;
-import latmod.lib.util.FloatBounds;
+import latmod.lib.util.DoubleBounds;
 
 @SideOnly(Side.CLIENT)
 public class Waypoints
@@ -17,7 +17,7 @@ public class Waypoints
 	public static final ConfigEntryBool enabled = new ConfigEntryBool("enabled", true);
 	public static final ConfigEntryBool displayTitle = new ConfigEntryBool("display_title", true);
 	public static final ConfigEntryBool displayDist = new ConfigEntryBool("display_distance", false);
-	public static final ConfigEntryFloat renderDistance = new ConfigEntryFloat("render_distance", new FloatBounds(2500F, 300F, 100000F));
+	public static final ConfigEntryDouble renderDistance = new ConfigEntryDouble("render_distance", new DoubleBounds(2500F, 300F, 100000F));
 	public static final ConfigEntryBool deathPoint = new ConfigEntryBool("death_point", true);
 	public static final FastList<Waypoint> waypoints = new FastList<Waypoint>();
 	
