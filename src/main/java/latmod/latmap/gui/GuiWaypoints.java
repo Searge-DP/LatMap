@@ -7,9 +7,9 @@ import ftb.lib.gui.GuiLM;
 import ftb.lib.gui.widgets.ButtonLM;
 import latmod.ftbu.util.LatCoreMC;
 import latmod.latmap.wp.*;
-import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.GuiScreen;
 
-public class GuiWaypoints extends GuiLM implements IColorCallback, GuiYesNoCallback
+public class GuiWaypoints extends GuiLM implements IColorCallback
 {
 	public final GuiScreen parent;
 	public final PanelWaypointList panelWaypoints;
@@ -108,13 +108,6 @@ public class GuiWaypoints extends GuiLM implements IColorCallback, GuiYesNoCallb
 				Waypoints.waypoints.get(id).color = c.color;
 		}
 		if(c.closeGui) mc.displayGuiScreen(this);
-		refreshWidgets();
-	}
-	
-	public void confirmClicked(boolean b, int i)
-	{
-		if(b) Waypoints.remove(i);
-		mc.displayGuiScreen(this);
 		refreshWidgets();
 	}
 }

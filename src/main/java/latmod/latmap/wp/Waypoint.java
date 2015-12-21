@@ -6,14 +6,19 @@ import latmod.lib.*;
 
 public class Waypoint
 {
+	public final long created;
 	public String name;
 	//public String customIcon;
 	public boolean enabled = true;
 	public WaypointType type = WaypointType.BEACON;
 	public int posX, posY, posZ, dim, color;
-	public int listID = -1;
-	public long created = System.currentTimeMillis();
 	public boolean deathpoint = false;
+	
+	public Waypoint(long l)
+	{ created = l; }
+	
+	public Waypoint()
+	{ this(System.currentTimeMillis()); }
 	
 	public void setPos(double x, double y, double z)
 	{
@@ -28,16 +33,18 @@ public class Waypoint
 	public int hashCode()
 	{ return Long.hashCode(created); }
 	
-	public Waypoint clone()
+	public boolean equals(Object o)
+	{ return o != null && (o == this || ((Waypoint)o).created == created); }
+	
+	public Waypoint clone(long l)
 	{
-		Waypoint w = new Waypoint();
+		Waypoint w = new Waypoint(l);
 		w.name = name;
 		w.enabled = enabled;
 		w.type = type;
 		w.setPos(posX, posY, posZ);
 		w.dim = dim;
 		w.color = color;
-		w.created = created;
 		w.deathpoint = deathpoint;
 		return w;
 	}
@@ -48,7 +55,7 @@ public class Waypoint
 		{
 			if(src == null) return null;
 			JsonObject o = new JsonObject();
-			o.add("Name", new JsonPrimitive(src.name));
+			o.add("name", new JsonPrimitive(src.name));
 			if(!src.enabled) o.add("disabled", new JsonPrimitive(true));
 			if(src.type.isMarker()) o.add("marker", new JsonPrimitive(true));
 			
@@ -69,7 +76,7 @@ public class Waypoint
 		{
 			if(json.isJsonNull()) return null;
 			JsonObject o = json.getAsJsonObject();
-			Waypoint w = new Waypoint();
+			Waypoint w = new Waypoint(o.get("date").getAsLong());
 			w.name = o.get("name").getAsString();
 			w.enabled = o.has("disabled") ? !o.get("disabled").getAsBoolean() : true;
 			w.type = WaypointType.get(o.has("marker") ? o.get("marker").getAsBoolean() : false);
@@ -80,7 +87,6 @@ public class Waypoint
 			w.posZ = posA.get(2).getAsInt();
 			w.dim = o.get("dim").getAsInt();
 			w.color = Integer.decode(o.get("col").getAsString());
-			w.created = o.get("date").getAsLong();
 			w.deathpoint = o.has("death") ? o.get("death").getAsBoolean() : false;
 			return w;
 		}

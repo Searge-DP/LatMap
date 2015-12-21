@@ -23,7 +23,7 @@ public class GuiEditWaypoint extends GuiLM implements IColorCallback, IFieldCall
 		xSize = 200;
 		ySize = 2 + 18 * 4;
 		
-		current = (w == null) ? new Waypoint() : w.clone();
+		current = (w == null) ? new Waypoint() : w.clone(w.created);
 		
 		if(w == null)
 		{
@@ -33,7 +33,6 @@ public class GuiEditWaypoint extends GuiLM implements IColorCallback, IFieldCall
 			current.dim = mc.thePlayer.dimension;
 			current.color = LatCoreMC.rand.nextInt();
 		}
-		else current.listID = w.listID;
 		
 		int buttonSize, buttonY;
 		
@@ -157,11 +156,7 @@ public class GuiEditWaypoint extends GuiLM implements IColorCallback, IFieldCall
 		GuiLM.drawBlankRect(guiLeft, guiTop, zLevel, xSize, ySize, 0xFF333333);
 		drawCenteredString(getFontRenderer(), "Waypoints", width / 2, 6, 0xFFFFFFFF); // LANG: Waypoints
 		
-		//GL11.glDisable(GL11.GL_LIGHTING);
-		//GL11.glEnable(GL11.GL_BLEND);
-		//GL11.glColor4f(1F, 1F, 1F, 1F);
-		
-		for(WidgetLM w : mainPanel.getWidgets())
+		for(WidgetLM w : mainPanel.widgets)
 			w.renderWidget();
 	}
 	

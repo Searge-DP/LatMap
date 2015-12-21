@@ -9,7 +9,7 @@ import latmod.latmap.wp.*;
 import latmod.lib.LMColorUtils;
 import net.minecraft.client.gui.*;
 
-public class PanelWaypoint extends PanelLM
+public class PanelWaypoint extends PanelLM implements GuiYesNoCallback
 {
 	public final Waypoint waypoint;
 	public final ButtonLM edit, teleport, color, type, delete;
@@ -60,7 +60,7 @@ public class PanelWaypoint extends PanelLM
 			public void onButtonPressed(int b)
 			{
 				gui.playClickSound();
-				LMGuis.displayColorSelector((GuiWaypoints)gui, waypoint.color, waypoint.listID, true);
+				LMGuis.displayColorSelector((GuiWaypoints)gui, waypoint.color, waypoint.created, true);
 			}
 		};
 		
@@ -86,10 +86,10 @@ public class PanelWaypoint extends PanelLM
 				
 				if(GuiScreen.isShiftKeyDown())
 				{
-					Waypoints.remove(waypoint.listID);
+					Waypoints.remove(waypoint);
 					gui.refreshWidgets();
 				}
-				else gui.mc.displayGuiScreen(new GuiYesNo((GuiWaypoints)gui, FTBLibLang.delete_item(waypoint.name), null, waypoint.listID));
+				else gui.mc.displayGuiScreen(new GuiYesNo(PanelWaypoint.this, FTBLibLang.delete_item(waypoint.name), null, 0));
 			}
 		};
 		
@@ -127,5 +127,12 @@ public class PanelWaypoint extends PanelLM
 		
 		if(edit.mouseOver())
 			GuiLM.drawBlankRect(edit.posX, ay + 1, 0F, edit.width, edit.height, 0x33FFFFFF);
+	}
+	
+	public void confirmClicked(boolean set, int i)
+	{
+		if(set) Waypoints.remove(waypoint);
+		gui.mc.displayGuiScreen(gui);
+		gui.refreshWidgets();
 	}
 }

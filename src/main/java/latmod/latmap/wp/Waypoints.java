@@ -35,22 +35,15 @@ public class Waypoints
 	
 	public static void add(Waypoint w)
 	{
-		if(w.listID >= 0 && w.listID < waypoints.size())
-			waypoints.set(w.listID, w);
-		else
-		{
-			waypoints.add(w);
-			for(int i = 0; i < waypoints.size(); i++)
-				waypoints.get(i).listID = i;
-		}
+		int idx = waypoints.indexOf(w);
+		if(idx != -1) waypoints.set(idx, w);
+		else waypoints.add(w);
 		save();
 	}
 	
-	public static void remove(int index)
+	public static void remove(Waypoint w)
 	{
-		waypoints.remove(index);
-		for(int i = 0; i < waypoints.size(); i++)
-			waypoints.get(i).listID = i;
+		waypoints.remove(w);
 		save();
 	}
 	
@@ -62,12 +55,7 @@ public class Waypoints
 			if(LMWorldClient.inst == null || LMWorldClient.inst.clientDataFolder == null) return;
 			waypointsFile = LMFileUtils.newFile(new File(LMWorldClient.inst.clientDataFolder, "latmap/waypoints.json"));
 			WaypointsFile wf = LMJsonUtils.fromJsonFile(waypointsFile, WaypointsFile.class);
-			if(wf != null)
-			{
-				waypoints.addAll(wf.waypoints);
-				for(int i = 0; i < waypoints.size(); i++)
-					waypoints.get(i).listID = i;
-			}
+			if(wf != null) waypoints.addAll(wf.waypoints);
 		}
 		catch(Exception e)
 		{ e.printStackTrace(); }
